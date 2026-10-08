@@ -17,7 +17,7 @@ import {
   LogOut
 } from 'lucide-react';
 import { ADMIN_CATEGORIES } from '../data/categories';
-import { addProductToFirestore, deleteProductFromFirestore, getStoredFirebaseConfig, saveFirebaseConfig } from '../services/firebase';
+import { addProductToFirestore, deleteProductFromFirestore, getStoredFirebaseConfig, saveFirebaseConfig, initFirebase } from '../services/firebase';
 import { openCloudinaryWidget, uploadFileDirectly, getCloudinaryConfig, saveCloudinaryConfig } from '../services/cloudinary';
 import { formatINR } from '../components/ProductCard';
 
@@ -42,6 +42,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
   // Settings State
   const [firebaseConfig, setFirebaseConfig] = useState(getStoredFirebaseConfig());
   const [cloudinaryConfig, setCloudinaryConfig] = useState(getCloudinaryConfig());
+  const isFirebaseConnected = Boolean(initFirebase());
 
   // Handle Cloudinary Official Widget
   const handleOpenCloudinaryWidget = () => {
@@ -109,7 +110,11 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
 
       await addProductToFirestore(productData);
 
-      onNotify(`Product "${title}" successfully stored into Firebase Firestore!`, 'success');
+      if (isFirebaseConnected) {
+        onNotify(`Product "${title}" published to Firebase Cloud & synced across all devices!`, 'success');
+      } else {
+        onNotify(`Product saved in this browser. Connect Firebase in API Settings to sync to your phone and all devices!`, 'info');
+      }
 
       // Reset form
       setTitle('');
@@ -198,6 +203,27 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
             </button>
           </div>
         </div>
+
+        {/* Firebase Cloud Connection Status Banner */}
+        {!isFirebaseConnected && (
+          <div className="mb-8 p-5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-950 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-bold text-sm">Firebase Cloud Database Not Connected (Running in Local Mode)</p>
+                <p className="text-amber-800 text-xs mt-1 leading-relaxed">
+                  Products you add right now are only saved in this computer's browser memory and will <strong>NOT appear on your mobile phone or other devices</strong>. To sync across all devices, click <strong>API Settings</strong> and connect your Firebase project.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowConfigModal(true)}
+              className="px-4 py-2 rounded-xl bg-amber-700 hover:bg-amber-800 text-white font-semibold text-xs shrink-0 cursor-pointer shadow-sm transition-colors"
+            >
+              Connect Firebase Keys
+            </button>
+          </div>
+        )}
 
         {/* 2-Column Layout: Form (Left) & Current Inventory (Right) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -458,10 +484,17 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full font-medium">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                    Firestore Synced
-                  </span>
+                  {isFirebaseConnected ? (
+                    <span className="inline-flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full font-medium">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                      Firebase Cloud Synced
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 text-xs text-amber-800 bg-amber-50 px-2.5 py-1 rounded-full font-medium border border-amber-200">
+                      <span className="w-2 h-2 rounded-full bg-amber-500" />
+                      Local Demo Mode
+                    </span>
+                  )}
                 </div>
               </div>
 
