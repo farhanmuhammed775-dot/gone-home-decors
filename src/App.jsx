@@ -1,17 +1,16 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminLoginModal } from './components/AdminLoginModal';
-import { Toast } from './components/Toast';
-import { subscribeToProducts } from './services/firebase';
+import { subscribeToProducts, getLocalProducts } from './services/firebase';
 import { MessageCircle } from 'lucide-react';
 
 export function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home' | 'admin'
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(() => getLocalProducts());
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState('All');
   const [toast, setToast] = useState({ message: '', type: 'info' });

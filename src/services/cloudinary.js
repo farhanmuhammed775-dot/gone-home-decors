@@ -9,7 +9,7 @@ export const getCloudinaryConfig = () => {
   }
   return {
     cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'y702lxik',
-    uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'ml_default',
+    uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'gone_preset',
     apiKey: import.meta.env.VITE_CLOUDINARY_API_KEY || ''
   };
 };
@@ -32,8 +32,8 @@ export const openCloudinaryWidget = (onSuccess, onError) => {
   try {
     const widget = window.cloudinary.createUploadWidget(
       {
-        cloudName: config.cloudName || 'demo',
-        uploadPreset: config.uploadPreset || 'ml_default',
+        cloudName: config.cloudName || 'y702lxik',
+        uploadPreset: config.uploadPreset || 'gone_preset',
         sources: ['local', 'url', 'camera', 'unsplash'],
         multiple: false,
         folder: 'gone_home_decors_products',
@@ -83,8 +83,8 @@ export const openCloudinaryWidget = (onSuccess, onError) => {
  */
 export const uploadFileDirectly = async (file, onProgress) => {
   const config = getCloudinaryConfig();
-  const cloudName = config.cloudName || 'demo';
-  const uploadPreset = config.uploadPreset || 'ml_default';
+  const cloudName = config.cloudName || 'y702lxik';
+  const uploadPreset = config.uploadPreset || 'gone_preset';
 
   const formData = new FormData();
   formData.append('file', file);

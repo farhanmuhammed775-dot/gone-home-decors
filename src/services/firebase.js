@@ -1,4 +1,4 @@
-﻿import { initializeApp, getApps, getApp } from 'firebase/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
 import { 
   getFirestore, 
   collection, 
@@ -34,7 +34,7 @@ export const getStoredFirebaseConfig = () => {
     storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "gone-home-decors.firebasestorage.app",
     messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "422373063194",
     appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:422373063194:web:970e0a78e2956ba8562fa3",
-    databaseURL: "https://gone-home-decors-default-rtdb.asia-southeast1.firebasedatabase.app"
+    databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || "https://gone-home-decors-default-rtdb.asia-southeast1.firebasedatabase.app"
   };
 };
 
@@ -62,42 +62,69 @@ export const initFirebase = () => {
 // Initialize on module load
 initFirebase();
 
-// Local Storage Fallback Store
-const getLocalProducts = () => {
+// Local Storage Fallback Store (Instant Load Cache)
+export const getLocalProducts = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY_PRODUCTS);
-    if (saved) return JSON.parse(saved);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
   } catch (e) {
     console.warn('Error reading local products', e);
   }
   return DEFAULT_PRODUCTS;
 };
 
-const saveLocalProducts = (products) => {
-  localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
+export const saveLocalProducts = (products) => {
+  try {
+    localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
+  } catch (e) {
+    console.warn('Error caching products to localStorage', e);
+  }
 };
 
 /**
  * Real-time listener for products from Firebase Firestore
+ * Uses Stale-While-Revalidate pattern: Immediately serves cached products (0ms),
+ * then updates seamlessly as soon as Firestore cloud data arrives.
  */
 export const subscribeToProducts = (onUpdate, onError) => {
+  // 1. Instantly deliver cached/default products so user never waits (0 ms latency)
+  const initialLocal = getLocalProducts();
+  if (initialLocal && initialLocal.length > 0) {
+    onUpdate(initialLocal);
+  }
+
   const db = initFirebase();
 
   if (!db) {
-    const local = getLocalProducts();
-    onUpdate(local);
     const handleStorage = () => onUpdate(getLocalProducts());
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);
   }
 
+  let cloudDataReceived = false;
+
+  // 2. Safety timeout: If Firestore network or cold-start takes > 2.5s, keep UI alive with cache
+  const timeoutId = setTimeout(() => {
+    if (!cloudDataReceived) {
+      console.warn('Firestore initial response pending, keeping cached catalog visible.');
+      onUpdate(getLocalProducts());
+    }
+  }, 2500);
+
   try {
     const productsRef = collection(db, 'products');
-    const q = query(productsRef, orderBy('createdAt', 'desc'));
+    // Query directly without server-side orderBy to avoid missing documents lacking createdAt or index requirements
+    const unsubscribe = onSnapshot(productsRef, (snapshot) => {
+      cloudDataReceived = true;
+      clearTimeout(timeoutId);
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
       if (snapshot.empty) {
-        // If Firestore collection is empty, seed/display initial catalog
+        // If Firestore collection has no documents yet, keep/seed default catalog
         const local = getLocalProducts();
         onUpdate(local);
       } else {
@@ -106,16 +133,31 @@ export const subscribeToProducts = (onUpdate, onError) => {
           ...doc.data(),
           createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || doc.data().createdAt || new Date().toISOString()
         }));
+
+        // Sort client-side by createdAt (newest first)
+        firestoreProducts.sort((a, b) => {
+          const timeA = new Date(a.createdAt || 0).getTime();
+          const timeB = new Date(b.createdAt || 0).getTime();
+          return timeB - timeA;
+        });
+
+        // Cache latest cloud products locally for 0ms load on next visit
+        saveLocalProducts(firestoreProducts);
         onUpdate(firestoreProducts);
       }
     }, (error) => {
-      console.warn('Firestore subscription notice, falling back to local catalog:', error.message);
+      clearTimeout(timeoutId);
+      console.warn('Firestore subscription notice, falling back to cached catalog:', error.message);
       onUpdate(getLocalProducts());
       if (onError) onError(error);
     });
 
-    return unsubscribe;
+    return () => {
+      clearTimeout(timeoutId);
+      if (typeof unsubscribe === 'function') unsubscribe();
+    };
   } catch (error) {
+    clearTimeout(timeoutId);
     console.error('Error setting up Firestore listener:', error);
     onUpdate(getLocalProducts());
     if (onError) onError(error);
