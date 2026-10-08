@@ -1,0 +1,257 @@
+﻿export const DEFAULT_PRODUCTS = [
+  // STAIRCASE
+  {
+    id: 'prod-stair-01',
+    title: 'Imperial Teak Wood Floating Staircase',
+    category: 'Staircase',
+    price: 185000,
+    mrp: 220000,
+    description: 'Custom handcrafted Kerala teak wood floating treads with tempered glass balustrade and recessed ambient LED channels.',
+    image_url: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.9,
+    reviewsCount: 38,
+    isFeatured: true,
+    material: 'Grade-A Nilambur Teak & 12mm Toughened Glass',
+    dimensions: 'Customized to Site Measurements',
+    createdAt: '2026-03-01T10:00:00Z'
+  },
+  {
+    id: 'prod-stair-02',
+    title: 'Royal Spiral Rosewood Architectural Stair',
+    category: 'Staircase',
+    price: 245000,
+    mrp: 285000,
+    description: 'Bespoke curved spiral staircase with intricate brass-finished wrought iron railings and rich seasoned rosewood steps.',
+    image_url: 'https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?q=80&w=1000&auto=format&fit=crop',
+    rating: 5.0,
+    reviewsCount: 22,
+    isFeatured: false,
+    material: 'Natural Indian Rosewood & Hand-forged Brass',
+    dimensions: 'Custom Radius & Height Specs',
+    createdAt: '2026-03-05T10:00:00Z'
+  },
+
+  // DINING
+  {
+    id: 'prod-din-01',
+    title: 'Aura 8-Seater Italian Marble & Sheesham Dining Set',
+    category: 'Dining',
+    price: 89999,
+    mrp: 115000,
+    description: 'Contemporary Italian Statuario marble top dining table framed in solid seasoned Sheesham wood with 8 ergonomically cushioned velvet chairs.',
+    image_url: 'https://images.unsplash.com/photo-1617806118233-18e1de247200?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.9,
+    reviewsCount: 64,
+    isFeatured: true,
+    material: 'Italian Statuario Marble, Solid Sheesham & Premium Velvet',
+    dimensions: '84" L x 42" W x 30" H',
+    createdAt: '2026-03-10T11:00:00Z'
+  },
+  {
+    id: 'prod-din-02',
+    title: 'Palermo 6-Seater Solid Teak Minimalist Dining Table',
+    category: 'Dining',
+    price: 64500,
+    mrp: 79900,
+    description: 'Clean Scandinavian lines with live-edge natural teak finish, tapered angled legs, and matching breathable rattan-weave back chairs.',
+    image_url: 'https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.8,
+    reviewsCount: 47,
+    isFeatured: false,
+    material: '100% Solid Kerala Teak & Handwoven Cane',
+    dimensions: '72" L x 36" W x 30" H',
+    createdAt: '2026-03-12T11:00:00Z'
+  },
+
+  // BEDROOM
+  {
+    id: 'prod-bed-01',
+    title: 'Versailles King Size Velvet Upholstered Bed with Storage',
+    category: 'Bedroom',
+    price: 74999,
+    mrp: 96000,
+    description: 'Chesterfield diamond-tufted high wingback headboard with hydraulic effortless storage lift and reinforced kiln-dried hardwood frame.',
+    image_url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.9,
+    reviewsCount: 89,
+    isFeatured: true,
+    material: 'Kiln-Dried Hardwood, Heavy-Duty Hydraulic Lift, Regal Velvet',
+    dimensions: 'King Size: 78" W x 84" L x 56" Headboard H',
+    createdAt: '2026-03-15T09:00:00Z'
+  },
+  {
+    id: 'prod-bed-02',
+    title: 'Kyoto Japanese Low-Platform Teak Bed Frame',
+    category: 'Bedroom',
+    price: 58000,
+    mrp: 72000,
+    description: 'Zen-inspired platform bed with floating cantilevered bedside nightstands, rounded chamfered corners, and natural matte poly-wax finish.',
+    image_url: 'https://images.unsplash.com/photo-1540518614846-7ede433c4ef0?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.8,
+    reviewsCount: 39,
+    isFeatured: false,
+    material: 'Seasoned Plantation Teak & Matte Organic Finish',
+    dimensions: 'Queen Size: 72" W x 80" L x 12" Platform H',
+    createdAt: '2026-03-18T09:00:00Z'
+  },
+
+  // LIVING
+  {
+    id: 'prod-liv-01',
+    title: 'Milano Luxury 7-Seater Modular L-Shape Sectional Sofa',
+    category: 'Living',
+    price: 94500,
+    mrp: 125000,
+    description: 'Ultra-plush feather-blend seating cushions in stain-resistant cream boucle fabric, reinforced with solid sal wood chassis and pocketed micro-springs.',
+    image_url: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1000&auto=format&fit=crop',
+    rating: 5.0,
+    reviewsCount: 112,
+    isFeatured: true,
+    material: 'Water-Repellent Boucle, 40-Density HR Foam & Solid Sal Wood',
+    dimensions: '118" W x 72" Chaise D x 34" H',
+    createdAt: '2026-03-20T14:00:00Z'
+  },
+  {
+    id: 'prod-liv-02',
+    title: 'The Aristocrat Genuine Leather Wingback Armchair',
+    category: 'Living',
+    price: 42000,
+    mrp: 54000,
+    description: 'Hand-burnished top grain cognac saddle leather armchair with solid walnut cabriole legs and brass nailhead trim detail.',
+    image_url: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.9,
+    reviewsCount: 53,
+    isFeatured: false,
+    material: 'Top-Grain Italian Leather, High Resilience Foam & Walnut Base',
+    dimensions: '34" W x 36" D x 44" H',
+    createdAt: '2026-03-22T14:00:00Z'
+  },
+
+  // DECOR
+  {
+    id: 'prod-dec-01',
+    title: 'Celestial Gold Sunburst Handcrafted Wall Art & Mirror',
+    category: 'Decor',
+    price: 16500,
+    mrp: 22000,
+    description: 'Statement 36-inch artisan wall mirror with multi-layered electroplated golden rays and beveled Saint-Gobain float glass center.',
+    image_url: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.9,
+    reviewsCount: 71,
+    isFeatured: true,
+    material: 'Rust-Proof Electroplated Mild Steel & Beveled Mirror',
+    dimensions: '36" Diameter x 2" Depth',
+    createdAt: '2026-03-25T16:00:00Z'
+  },
+  {
+    id: 'prod-dec-02',
+    title: 'Heritage Kerala Brass Uruli with Floral Stand',
+    category: 'Decor',
+    price: 12800,
+    mrp: 15900,
+    description: 'Traditional bell-metal handcrafted decorative Uruli, hand-polished to a radiant golden gleam, perfect for floating water flowers and candles.',
+    image_url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.8,
+    reviewsCount: 41,
+    isFeatured: false,
+    material: 'Authentic Bell Metal / High Purity Brass',
+    dimensions: '18" Diameter x 8" Stand H',
+    createdAt: '2026-03-27T16:00:00Z'
+  },
+
+  // MATTRESS
+  {
+    id: 'prod-mat-01',
+    title: 'DreamCloud 10-Inch Orthopedic Organic Latex Mattress',
+    category: 'Mattress',
+    price: 36999,
+    mrp: 48000,
+    description: 'Certified 100% natural Kerala pin-core latex paired with zero partner-disturbance pocketed pocket coils and organic bamboo fabric quilting.',
+    image_url: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.9,
+    reviewsCount: 142,
+    isFeatured: true,
+    material: 'Natural Latex, 5-Zone Pocket Springs, Breathable Bamboo Cover',
+    dimensions: 'King: 78" x 72" x 10" Thick (All Custom Sizes Available)',
+    createdAt: '2026-03-28T12:00:00Z'
+  },
+  {
+    id: 'prod-mat-02',
+    title: 'SpineCare Dual-Comfort Ergonomic Reversible Mattress',
+    category: 'Mattress',
+    price: 24500,
+    mrp: 32000,
+    description: 'Dual firmness featuring firm orthopedic bonded support on one side and cooling gel memory foam on the reverse side.',
+    image_url: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.7,
+    reviewsCount: 88,
+    isFeatured: false,
+    material: 'Reversible Dual Foam, Cooling Gel Layer, Anti-Microbial Cover',
+    dimensions: 'Queen: 78" x 60" x 8" Thick',
+    createdAt: '2026-03-30T12:00:00Z'
+  },
+
+  // OUTDOOR
+  {
+    id: 'prod-out-01',
+    title: 'Riviera All-Weather PE Rattan Patio Sofa & Table Set',
+    category: 'Outdoor',
+    price: 68000,
+    mrp: 85000,
+    description: 'UV-resistant handwoven synthetic rattan patio ensemble with powder-coated rust-free aluminum structure and waterproof Sunbrella fabric cushions.',
+    image_url: 'https://images.unsplash.com/photo-1560185007-c5ca9d2c014d?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.8,
+    reviewsCount: 36,
+    isFeatured: true,
+    material: 'High-Density All-Weather PE Wicker & Powder Coated Aluminum',
+    dimensions: '3-Seater: 76" W, 2 Chairs: 32" W, Coffee Table: 44" L',
+    createdAt: '2026-04-01T15:00:00Z'
+  },
+  {
+    id: 'prod-out-02',
+    title: 'Bali Sanctuary Teak Garden Swing with Canopy',
+    category: 'Outdoor',
+    price: 52000,
+    mrp: 66000,
+    description: 'Solid seasoned outdoor teak wood 3-seater garden swing with water-repellent canopy shade, heavy-duty stainless steel carabiners, and chains.',
+    image_url: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.9,
+    reviewsCount: 29,
+    isFeatured: false,
+    material: 'Weather-Treated Plantation Teak & Marine-Grade SS Hardware',
+    dimensions: '82" W x 48" D x 74" H',
+    createdAt: '2026-04-02T15:00:00Z'
+  },
+
+  // LAMPS & LIGHTING
+  {
+    id: 'prod-lamp-01',
+    title: 'Empire Royal K9 Crystal Tiered Chandelier',
+    category: 'Lamps & Lighting',
+    price: 49999,
+    mrp: 65000,
+    description: 'Breathtaking 5-tier chandelier with precision-cut K9 sparkling optical crystals suspended from a polished brushed gold brass canopy.',
+    image_url: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=1000&auto=format&fit=crop',
+    rating: 5.0,
+    reviewsCount: 68,
+    isFeatured: true,
+    material: 'Pure K9 Optical Crystals & Brushed Antique Brass',
+    dimensions: '32" Diameter x 38" Height with 48" Adjustable Chain',
+    createdAt: '2026-04-03T18:00:00Z'
+  },
+  {
+    id: 'prod-lamp-02',
+    title: 'Nordic Arc Minimalist Marble Base Floor Lamp',
+    category: 'Lamps & Lighting',
+    price: 18500,
+    mrp: 24000,
+    description: 'Graceful sweeping telescopic brass arch supported by an authentic heavy Nero Marquina black marble pedestal with warm linen drum shade.',
+    image_url: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=1000&auto=format&fit=crop',
+    rating: 4.8,
+    reviewsCount: 44,
+    isFeatured: false,
+    material: 'Solid Marble Pedestal, Spun Brass Arc & Handwoven Linen Shade',
+    dimensions: '78" Height x 45" Arc Reach, 14" Marble Base',
+    createdAt: '2026-04-04T18:00:00Z'
+  }
+];
