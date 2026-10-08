@@ -1,12 +1,6 @@
 const STORAGE_KEY_CLOUDINARY = 'gone_cloudinary_config';
 
 export const getCloudinaryConfig = () => {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY_CLOUDINARY);
-    if (saved) return JSON.parse(saved);
-  } catch (e) {
-    console.warn('Error reading stored Cloudinary config', e);
-  }
   return {
     cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'y702lxik',
     uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'gone_preset',

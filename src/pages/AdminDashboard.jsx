@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { 
-  Upload, 
-  PlusCircle, 
-  Trash2, 
-  Image as ImageIcon, 
-  Settings, 
-  CheckCircle, 
-  AlertCircle, 
-  ExternalLink, 
-  ArrowLeft, 
-  Database, 
-  Cloud, 
+import {
+  Upload,
+  PlusCircle,
+  Trash2,
+  Image as ImageIcon,
+  Settings,
+  CheckCircle,
+  AlertCircle,
+  ExternalLink,
+  ArrowLeft,
+  Database,
+  Cloud,
   Eye,
   RefreshCw,
   Sparkles,
@@ -186,7 +186,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
   return (
     <div className="min-h-screen bg-[#F7F5F0] pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        
+
         {/* Top Breadcrumb & Action Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 bg-white p-6 rounded-2xl border border-gray-200/80 shadow-xs">
           <div>
@@ -255,11 +255,11 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
 
         {/* 2-Column Layout: Form (Left) & Current Inventory (Right) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
+
           {/* PRODUCT UPLOAD FORM (5 Columns) */}
           <div className="lg:col-span-5">
             <div className="bg-white rounded-2xl border border-gray-200/90 shadow-sm p-6 sm:p-7 sticky top-28">
-              
+
               <div className="flex items-center justify-between pb-4 mb-5 border-b border-gray-100">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${editingProductId ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-[#FCF9F0] border border-[#EEDFA8] text-[#88652D]'}`}>
@@ -287,7 +287,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
               </div>
 
               <form onSubmit={handleSubmitProduct} className="space-y-4">
-                
+
                 {/* Product Title */}
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5 font-['Cinzel']">
@@ -357,30 +357,18 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                   <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5 font-['Cinzel']">
                     Product Media (Cloudinary) *
                   </label>
-                  
+
                   {/* Upload Action Buttons */}
                   <div className="flex flex-col sm:flex-row gap-2 mb-2">
-                    {/* Official Cloudinary Widget Button */}
+                    {/* Official Cloudinary Widget Button (Enforces Cropping) */}
                     <button
                       type="button"
                       onClick={handleOpenCloudinaryWidget}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#121417] hover:bg-gray-800 text-[#E8D3A2] text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#121417] hover:bg-[#C5A059] text-[#E8D3A2] hover:text-[#121417] text-xs font-semibold shadow-md transition-all cursor-pointer border border-[#C5A059]/40"
                     >
-                      <Cloud className="w-4 h-4 text-[#C5A059]" />
-                      <span>Cloudinary Widget</span>
+                      <Cloud className="w-5 h-5" />
+                      <span>Upload Product Photo (Auto-Crop)</span>
                     </button>
-
-                    {/* Direct File Picker */}
-                    <label className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-gray-300 hover:border-[#C5A059] bg-white text-gray-700 text-xs font-semibold cursor-pointer transition-colors text-center">
-                      <Upload className="w-4 h-4 text-[#C5A059]" />
-                      <span>Upload File</span>
-                      <input
-                        type="file"
-                        accept="image/*,video/*"
-                        onChange={handleDirectFileUpload}
-                        className="hidden"
-                      />
-                    </label>
                   </div>
 
                   {/* Or Direct Image URL input */}
@@ -398,8 +386,8 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                   {uploading && (
                     <div className="mt-2">
                       <div className="w-full bg-gray-200 rounded-full h-1.5">
-                        <div 
-                          className="bg-[#C5A059] h-1.5 rounded-full transition-all duration-300" 
+                        <div
+                          className="bg-[#C5A059] h-1.5 rounded-full transition-all duration-300"
                           style={{ width: `${uploadProgress}%` }}
                         />
                       </div>
@@ -526,7 +514,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
           {/* CATALOG INVENTORY TABLE (7 Columns) */}
           <div className="lg:col-span-7">
             <div className="bg-white rounded-2xl border border-gray-200/90 shadow-sm p-6 sm:p-7">
-              
+
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-6 border-b border-gray-100">
                 <div>
                   <h2 className="font-['Cinzel'] font-bold text-lg text-gray-900 flex items-center gap-2">
@@ -569,7 +557,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                   <tbody className="divide-y divide-gray-100">
                     {products.map((prod) => (
                       <tr key={prod.id} className="hover:bg-gray-50/80 transition-colors group">
-                        
+
                         {/* Title & Thumbnail */}
                         <td className="py-3.5 px-3">
                           <div className="flex items-center gap-3">
@@ -652,11 +640,11 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
 
       {/* CLOUDINARY & FIREBASE INTEGRATION MODAL */}
       {showConfigModal && (
-        <div 
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
           onClick={() => setShowConfigModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-3xl p-6 sm:p-8 max-w-xl w-full border border-[#C5A059]/40 shadow-2xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
@@ -667,7 +655,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                   API & Cloud Configuration
                 </h3>
               </div>
-              <button 
+              <button
                 onClick={() => setShowConfigModal(false)}
                 className="text-gray-400 hover:text-gray-700 text-sm"
               >

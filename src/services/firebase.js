@@ -1,15 +1,15 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  deleteDoc, 
-  doc, 
-  updateDoc, 
-  onSnapshot, 
-  query, 
-  orderBy, 
-  serverTimestamp 
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+  onSnapshot,
+  query,
+  orderBy,
+  serverTimestamp
 } from 'firebase/firestore';
 import { DEFAULT_PRODUCTS } from '../data/defaultProducts';
 
@@ -18,15 +18,6 @@ const STORAGE_KEY_PRODUCTS = 'gone_local_products';
 
 // Default Live Firebase Configuration
 export const getStoredFirebaseConfig = () => {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY_CONFIG);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (parsed.apiKey && parsed.projectId) return parsed;
-    }
-  } catch (e) {
-    console.warn('Error reading stored Firebase config', e);
-  }
   return {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDQgqC9CGBdtuPBajupMyklZivc1zXEyUk",
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "gone-home-decors.firebaseapp.com",
@@ -161,7 +152,7 @@ export const subscribeToProducts = (onUpdate, onError) => {
     console.error('Error setting up Firestore listener:', error);
     onUpdate(getLocalProducts());
     if (onError) onError(error);
-    return () => {};
+    return () => { };
   }
 };
 
@@ -219,7 +210,7 @@ export const updateProductInFirestore = async (productId, updatedData) => {
 
   // Update local store
   const localList = getLocalProducts();
-  const updatedList = localList.map(p => 
+  const updatedList = localList.map(p =>
     p.id === productId ? { ...p, ...formattedData, updatedAt: new Date().toISOString() } : p
   );
   saveLocalProducts(updatedList);
