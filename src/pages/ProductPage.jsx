@@ -49,7 +49,7 @@ export const ProductPage = ({ products, onBack }) => {
     };
 
     return (
-        <div className="min-h-screen bg-[#FDFBF7] pt-28 pb-20">
+        <div className="min-h-screen bg-[#FDFBF7] pt-6 md:pt-10 pb-20 fade-in">
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
 
                 {/* Breadcrumb Navigation */}

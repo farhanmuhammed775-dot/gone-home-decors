@@ -125,15 +125,17 @@ export function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-[#1F2421] selection:bg-[#C5A059]/20 selection:text-[#88652D]">
-      {/* Global Navigation Header (Admin trigger hidden in logo - 3 clicks) */}
-      <Header
-        currentView={currentView}
-        onOpenAdminLogin={handleOpenAdminLogin}
-        onCategorySelect={(cat) => {
-          setActiveCategory(cat);
-          if (currentView !== 'home') navigateTo('home');
-        }}
-      />
+      {/* Global Navigation Header (Hidden on Product Page for immersive view) */}
+      {currentView !== 'product' && (
+        <Header
+          currentView={currentView}
+          onOpenAdminLogin={handleOpenAdminLogin}
+          onCategorySelect={(cat) => {
+            setActiveCategory(cat);
+            if (currentView !== 'home') navigateTo('home');
+          }}
+        />
+      )}
 
       {/* Main Content Area */}
       <div className="flex-1">
