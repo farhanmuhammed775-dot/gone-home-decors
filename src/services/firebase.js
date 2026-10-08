@@ -20,9 +20,9 @@ const STORAGE_KEY_PRODUCTS = 'gone_local_products';
 export const getStoredFirebaseConfig = () => {
   return {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDQgqC9CGBdtuPBajupMyklZivc1zXEyUk",
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "gone-home-decors.firebaseapp.com",
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "gone-home-decors",
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "gone-home-decors.firebasestorage.app",
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "g-one-home-decors.firebaseapp.com",
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "g-one-home-decors",
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "g-one-home-decors.firebasestorage.app",
     messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "422373063194",
     appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:422373063194:web:970e0a78e2956ba8562fa3",
     databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || "https://gone-home-decors-default-rtdb.asia-southeast1.firebasedatabase.app"
