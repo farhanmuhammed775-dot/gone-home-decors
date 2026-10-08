@@ -8,7 +8,9 @@ import {
   Palette, 
   Layers, 
   SunMedium, 
-  Lamp 
+  Lamp,
+  ChevronRight,
+  Check
 } from 'lucide-react';
 import { CATEGORIES } from '../data/categories';
 
@@ -25,75 +27,110 @@ const iconMap = {
 };
 
 export const CategoryNav = ({ activeCategory, onSelectCategory, productCounts }) => {
+  const handleCategoryClick = (categoryName) => {
+    onSelectCategory(categoryName);
+    const productsSection = document.getElementById('products');
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
-    <div className="bg-white border-b border-[#EADDCA]/60 sticky top-[72px] sm:top-[76px] z-30 shadow-xs backdrop-blur-md bg-white/95">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
+    <section id="categories" className="py-10 sm:py-14 bg-[#FDFBF7] border-b border-[#EADDCA]/60">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6">
         
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#C5A059]" />
-            <h2 className="text-xs uppercase font-['Cinzel'] tracking-wider font-bold text-gray-800">
-              Curated Collections
-            </h2>
+        <div className="text-center max-w-2xl mx-auto mb-7 sm:mb-9">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FCF9F0] border border-[#EEDFA8] text-[11px] font-semibold text-[#88652D] uppercase tracking-wider mb-2">
+            <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
+            <span>Select Collection</span>
           </div>
-          <span className="text-[11px] text-gray-500 hidden sm:inline">
-            Select category to filter
-          </span>
+          <h2 className="text-xl sm:text-3xl font-['Cinzel'] font-bold text-gray-900">
+            Explore By Categories
+          </h2>
+          <p className="text-xs sm:text-sm text-gray-500 mt-1">
+            Tap any category below to view models &amp; confirm orders
+          </p>
         </div>
 
-        {/* Categories Bar in exact requested order:
-            1. All
-            2. Staircase
-            3. Dining
-            4. Bedroom
-            5. Living
-            6. Decor
-            7. Mattress
-            8. Outdoor
-            9. Lamps & Lighting
-        */}
-        <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-[#C5A059]/40 scrollbar-track-gray-100 no-scrollbar">
+        {/* 9 Categories in 3 Rows (3 Columns x 3 Rows = 9 Cards) */}
+        <div className="grid grid-cols-3 gap-2.5 sm:gap-4 md:gap-5">
           {CATEGORIES.map((cat, index) => {
             const IconComponent = iconMap[cat.icon] || Sparkles;
-            const isSelected = (cat.name === 'All' && activeCategory === 'All') || (activeCategory.toLowerCase() === cat.name.toLowerCase());
+            const isSelected = 
+              (cat.name === 'All' && activeCategory === 'All') || 
+              (activeCategory.toLowerCase() === cat.name.toLowerCase());
             const count = productCounts[cat.name] || 0;
 
             return (
               <button
                 key={cat.id}
-                onClick={() => onSelectCategory(cat.name)}
-                className={`group flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap transition-all duration-200 border cursor-pointer ${
+                type="button"
+                onClick={() => handleCategoryClick(cat.name)}
+                className={`group relative overflow-hidden rounded-xl sm:rounded-2xl transition-all duration-300 text-left border cursor-pointer flex flex-col justify-between aspect-[1/1] sm:aspect-[4/3] md:aspect-[16/10] p-2.5 sm:p-4 ${
                   isSelected
-                    ? 'bg-[#121417] text-white border-[#121417] shadow-md ring-2 ring-[#C5A059]/50'
-                    : 'bg-[#FDFBF7] text-gray-700 border-gray-200 hover:border-[#C5A059] hover:bg-white hover:text-[#121417]'
+                    ? 'border-[#C5A059] ring-2 ring-[#C5A059] shadow-lg shadow-[#C5A059]/20 scale-[1.02]'
+                    : 'border-gray-200 hover:border-[#C5A059]/60 hover:shadow-md hover:scale-[1.01]'
                 }`}
               >
-                <span className={`p-1 rounded-md transition-colors ${
-                  isSelected 
-                    ? 'bg-[#C5A059] text-[#121417]' 
-                    : 'bg-gray-100 text-[#88652D] group-hover:bg-[#C5A059]/20'
-                }`}>
-                  <IconComponent className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                </span>
-
-                <span className="tracking-wide">{cat.name}</span>
-
-                {count > 0 && (
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-mono ${
+                {/* Background Image with Dark Vignette */}
+                <div className="absolute inset-0 z-0">
+                  <img
+                    src={cat.image}
+                    alt={cat.name}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 filter brightness-[0.70] group-hover:brightness-[0.60]"
+                  />
+                  <div className={`absolute inset-0 transition-colors ${
                     isSelected 
-                      ? 'bg-white/20 text-white' 
-                      : 'bg-gray-200/80 text-gray-600 group-hover:bg-[#C5A059]/20 group-hover:text-[#88652D]'
+                      ? 'bg-gradient-to-t from-black/85 via-black/40 to-[#C5A059]/25' 
+                      : 'bg-gradient-to-t from-black/80 via-black/35 to-transparent group-hover:from-black/85'
+                  }`} />
+                </div>
+
+                {/* Top Badge: Active / Count */}
+                <div className="relative z-10 flex items-center justify-between w-full">
+                  <span className={`p-1 sm:p-1.5 rounded-lg backdrop-blur-md transition-colors ${
+                    isSelected
+                      ? 'bg-[#C5A059] text-[#121417]'
+                      : 'bg-black/40 text-[#E8D3A2] border border-white/10 group-hover:bg-[#C5A059] group-hover:text-[#121417]'
                   }`}>
-                    {count}
+                    <IconComponent className="w-3 h-3 sm:w-4 sm:h-4" />
                   </span>
-                )}
+
+                  {isSelected ? (
+                    <span className="hidden xs:inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-bold uppercase tracking-wider bg-[#C5A059] text-[#121417] shadow-xs">
+                      <Check className="w-2.5 h-2.5" />
+                      <span>Active</span>
+                    </span>
+                  ) : count > 0 ? (
+                    <span className="px-1.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-mono font-medium bg-black/50 text-gray-200 backdrop-blur-md border border-white/10">
+                      {count}
+                    </span>
+                  ) : null}
+                </div>
+
+                {/* Bottom Content: Category Name & Arrow */}
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between">
+                    <h3 className={`font-['Cinzel'] font-bold text-xs sm:text-base md:text-lg leading-tight line-clamp-1 transition-colors ${
+                      isSelected ? 'text-[#E8D3A2]' : 'text-white group-hover:text-[#E8D3A2]'
+                    }`}>
+                      {cat.name}
+                    </h3>
+                    <ChevronRight className={`w-3 h-3 sm:w-4 sm:h-4 text-[#C5A059] transition-transform ${
+                      isSelected ? 'translate-x-0.5' : 'opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5'
+                    }`} />
+                  </div>
+                  <p className="hidden md:block text-[11px] text-gray-300 line-clamp-1 mt-0.5 font-light">
+                    {cat.description}
+                  </p>
+                </div>
               </button>
             );
           })}
         </div>
 
       </div>
-    </div>
+    </section>
   );
 };

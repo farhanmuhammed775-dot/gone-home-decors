@@ -3,9 +3,8 @@ import { HeroBanner } from '../components/HeroBanner';
 import { CategoryNav } from '../components/CategoryNav';
 import { ProductCard } from '../components/ProductCard';
 import { ProductDetailModal } from '../components/ProductDetailModal';
-import { TrustFeatures } from '../components/TrustFeatures';
 import { AboutSection } from '../components/AboutSection';
-import { Search, SlidersHorizontal, Sparkles, AlertCircle } from 'lucide-react';
+import { Search, SlidersHorizontal, Sparkles, AlertCircle, ArrowUpRight } from 'lucide-react';
 
 export const HomePage = ({ products, activeCategory, setActiveCategory, loading, error }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -48,43 +47,43 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
 
   return (
     <main className="min-h-screen">
-      {/* 1. Hero Section with Autoplaying Light Background Video */}
+      {/* 1. Hero Section with Autoplaying Light Background Video & Royal Colonial Title */}
       <HeroBanner />
 
-      {/* 2. Value Props / WoodenStreet Trust Banner */}
-      <TrustFeatures />
-
-      {/* 3. Homepage Categories Bar (Exact order: All, Staircase, Dining, Bedroom, Living, Decor, Mattress, Outdoor, Lamps & Lighting) */}
+      {/* 2. 9 Categories in 3 Rows Grid (Immediately below Hero - No Left-Scroll) */}
       <CategoryNav
         activeCategory={activeCategory}
         onSelectCategory={setActiveCategory}
         productCounts={productCounts}
       />
 
-      {/* 4. Products Section */}
-      <section id="products" className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6">
+      {/* 3. Products Section */}
+      <section id="products" className="py-10 sm:py-14 max-w-7xl mx-auto px-4 sm:px-6">
         
-        {/* Controls Bar: Search & Sort */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-white p-4 rounded-2xl border border-gray-200/80 shadow-xs">
+        {/* Controls Bar: Active Category Heading, Search & Sort */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200/80 shadow-xs">
           <div>
-            <h2 className="font-['Cinzel'] font-bold text-xl sm:text-2xl text-gray-900 flex items-center gap-2">
-              <span>{activeCategory === 'All' ? 'All Collections' : activeCategory}</span>
-              <span className="text-xs font-normal font-sans text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
-                {filteredProducts.length} {filteredProducts.length === 1 ? 'Product' : 'Products'}
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#C5A059]" />
+              <h2 className="font-['Cinzel'] font-bold text-lg sm:text-2xl text-gray-900">
+                {activeCategory === 'All' ? 'All Collections' : `${activeCategory} Models`}
+              </h2>
+              <span className="text-xs font-mono font-medium text-gray-500 bg-gray-100 px-2.5 py-0.5 rounded-full">
+                {filteredProducts.length} {filteredProducts.length === 1 ? 'Model' : 'Models'}
               </span>
-            </h2>
-            <p className="text-xs text-gray-500 mt-0.5">
-              Instant confirmation and bespoke customization on WhatsApp
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Select any item to confirm order directly on WhatsApp with our artisans
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
             {/* Search Input */}
-            <div className="relative w-full sm:w-64">
+            <div className="relative w-full sm:w-60">
               <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Search sofas, beds, decor..."
+                placeholder="Search models..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 text-xs rounded-xl bg-gray-50 border border-gray-200 focus:outline-none focus:border-[#C5A059] focus:bg-white transition-colors"
@@ -141,10 +140,10 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
               <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-gray-300 p-8">
                 <AlertCircle className="w-12 h-12 text-[#C5A059] mx-auto mb-3" />
                 <h3 className="font-['Cinzel'] font-bold text-lg text-gray-800 mb-1">
-                  No Products Found in this Category
+                  No Models Found in "{activeCategory}"
                 </h3>
                 <p className="text-xs text-gray-500 mb-4 max-w-md mx-auto">
-                  We could not find matching products. Try clearing search filters or browse all items.
+                  Try viewing all categories or clearing search filters.
                 </p>
                 <button
                   type="button"
@@ -152,9 +151,9 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
                     setActiveCategory('All');
                     setSearchQuery('');
                   }}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider bg-[#121417] text-white hover:bg-[#C5A059] hover:text-[#121417] transition-colors"
+                  className="px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider bg-[#121417] text-white hover:bg-[#C5A059] hover:text-[#121417] transition-colors cursor-pointer"
                 >
-                  Reset All Filters
+                  Show All 9 Categories
                 </button>
               </div>
             )}
@@ -163,7 +162,7 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
 
       </section>
 
-      {/* 5. About G One Home Décors & Manjeri, Kerala Story */}
+      {/* 4. About G One Home Décors Story */}
       <AboutSection />
 
       {/* Quick View Modal */}
