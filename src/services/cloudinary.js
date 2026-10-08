@@ -1,4 +1,4 @@
-﻿const STORAGE_KEY_CLOUDINARY = 'gone_cloudinary_config';
+const STORAGE_KEY_CLOUDINARY = 'gone_cloudinary_config';
 
 export const getCloudinaryConfig = () => {
   try {
@@ -8,7 +8,7 @@ export const getCloudinaryConfig = () => {
     console.warn('Error reading stored Cloudinary config', e);
   }
   return {
-    cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'gonehomedecors',
+    cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'y702lxik',
     uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'ml_default',
     apiKey: import.meta.env.VITE_CLOUDINARY_API_KEY || ''
   };
