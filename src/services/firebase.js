@@ -16,21 +16,25 @@ import { DEFAULT_PRODUCTS } from '../data/defaultProducts';
 const STORAGE_KEY_CONFIG = 'gone_firebase_config';
 const STORAGE_KEY_PRODUCTS = 'gone_local_products';
 
-// Default / fallback Firebase configuration template
+// Default Live Firebase Configuration
 export const getStoredFirebaseConfig = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY_CONFIG);
-    if (saved) return JSON.parse(saved);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.apiKey && parsed.projectId) return parsed;
+    }
   } catch (e) {
     console.warn('Error reading stored Firebase config', e);
   }
   return {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || '',
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '',
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
-    appId: import.meta.env.VITE_FIREBASE_APP_ID || ''
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyDQgqC9CGBdtuPBajupMyklZivc1zXEyUk",
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "gone-home-decors.firebaseapp.com",
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "gone-home-decors",
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "gone-home-decors.firebasestorage.app",
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "422373063194",
+    appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:422373063194:web:970e0a78e2956ba8562fa3",
+    databaseURL: "https://gone-home-decors-default-rtdb.asia-southeast1.firebasedatabase.app"
   };
 };
 
@@ -55,10 +59,10 @@ export const initFirebase = () => {
   }
 };
 
-// Initialize on module load if config exists
+// Initialize on module load
 initFirebase();
 
-// Local Storage Fallback Store (for immediate out-of-the-box working experience)
+// Local Storage Fallback Store
 const getLocalProducts = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY_PRODUCTS);
@@ -75,16 +79,13 @@ const saveLocalProducts = (products) => {
 
 /**
  * Real-time listener for products from Firebase Firestore
- * Falls back seamlessly to local storage / preloaded catalog
  */
 export const subscribeToProducts = (onUpdate, onError) => {
   const db = initFirebase();
 
   if (!db) {
-    // Deliver local products immediately
     const local = getLocalProducts();
     onUpdate(local);
-    // Listen for storage events across tabs or local mutations
     const handleStorage = () => onUpdate(getLocalProducts());
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);
@@ -96,20 +97,19 @@ export const subscribeToProducts = (onUpdate, onError) => {
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       if (snapshot.empty) {
-        // If Firestore collection is empty, load initial default products
+        // If Firestore collection is empty, seed/display initial catalog
         const local = getLocalProducts();
         onUpdate(local);
       } else {
         const firestoreProducts = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
-          // format timestamp if needed
           createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || doc.data().createdAt || new Date().toISOString()
         }));
         onUpdate(firestoreProducts);
       }
     }, (error) => {
-      console.warn('Firestore subscription failed, falling back to local catalog:', error.message);
+      console.warn('Firestore subscription notice, falling back to local catalog:', error.message);
       onUpdate(getLocalProducts());
       if (onError) onError(error);
     });
@@ -124,7 +124,7 @@ export const subscribeToProducts = (onUpdate, onError) => {
 };
 
 /**
- * Add product to Firestore and sync local store
+ * Add product to Firestore and sync across all devices
  */
 export const addProductToFirestore = async (productData) => {
   const db = initFirebase();
@@ -138,7 +138,7 @@ export const addProductToFirestore = async (productData) => {
     createdAt: serverTimestamp()
   };
 
-  // Always update local store for instant UI response
+  // Sync local store for instantaneous UI response
   const localList = getLocalProducts();
   const localProduct = {
     ...newProduct,
@@ -153,7 +153,6 @@ export const addProductToFirestore = async (productData) => {
       return { id: docRef.id, ...newProduct };
     } catch (error) {
       console.error('Error saving to Firestore:', error);
-      // Still succeeded locally
       return localProduct;
     }
   }
@@ -162,7 +161,43 @@ export const addProductToFirestore = async (productData) => {
 };
 
 /**
- * Delete product
+ * Update product in Firestore
+ */
+export const updateProductInFirestore = async (productId, updatedData) => {
+  const db = initFirebase();
+  const formattedData = {
+    ...updatedData,
+    price: Number(updatedData.price) || 0,
+    mrp: Number(updatedData.mrp) || Math.round(Number(updatedData.price) * 1.25),
+    rating: updatedData.rating || 5.0,
+    reviewsCount: updatedData.reviewsCount || 1,
+    isFeatured: Boolean(updatedData.isFeatured),
+    updatedAt: serverTimestamp()
+  };
+
+  // Update local store
+  const localList = getLocalProducts();
+  const updatedList = localList.map(p => 
+    p.id === productId ? { ...p, ...formattedData, updatedAt: new Date().toISOString() } : p
+  );
+  saveLocalProducts(updatedList);
+
+  if (db && !productId.startsWith('local-')) {
+    try {
+      const docRef = doc(db, 'products', productId);
+      await updateDoc(docRef, formattedData);
+      return { id: productId, ...formattedData };
+    } catch (error) {
+      console.error('Error updating in Firestore:', error);
+      return { id: productId, ...formattedData };
+    }
+  }
+
+  return { id: productId, ...formattedData };
+};
+
+/**
+ * Delete product from Firestore
  */
 export const deleteProductFromFirestore = async (productId) => {
   const db = initFirebase();
@@ -172,7 +207,7 @@ export const deleteProductFromFirestore = async (productId) => {
   const filtered = localList.filter(p => p.id !== productId);
   saveLocalProducts(filtered);
 
-  if (db && !productId.startsWith('local-') && !productId.startsWith('prod-')) {
+  if (db && !productId.startsWith('local-')) {
     try {
       await deleteDoc(doc(db, 'products', productId));
       return true;

@@ -14,15 +14,18 @@ import {
   Eye,
   RefreshCw,
   Sparkles,
-  LogOut
+  LogOut,
+  Pencil,
+  X
 } from 'lucide-react';
 import { ADMIN_CATEGORIES } from '../data/categories';
-import { addProductToFirestore, deleteProductFromFirestore, getStoredFirebaseConfig, saveFirebaseConfig, initFirebase } from '../services/firebase';
+import { addProductToFirestore, updateProductInFirestore, deleteProductFromFirestore, getStoredFirebaseConfig, saveFirebaseConfig, initFirebase } from '../services/firebase';
 import { openCloudinaryWidget, uploadFileDirectly, getCloudinaryConfig, saveCloudinaryConfig } from '../services/cloudinary';
 import { formatINR } from '../components/ProductCard';
 
 export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) => {
   // Form State
+  const [editingProductId, setEditingProductId] = useState(null);
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState(ADMIN_CATEGORIES[0]);
   const [price, setPrice] = useState('');
@@ -82,6 +85,37 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
     }
   };
 
+  // Start editing an existing product
+  const handleStartEdit = (prod) => {
+    setEditingProductId(prod.id);
+    setTitle(prod.title || '');
+    setCategory(prod.category || ADMIN_CATEGORIES[0]);
+    setPrice(prod.price || '');
+    setMrp(prod.mrp || '');
+    setDescription(prod.description || '');
+    setImageUrl(prod.image_url || '');
+    setMaterial(prod.material || '');
+    setDimensions(prod.dimensions || '');
+    setIsFeatured(Boolean(prod.isFeatured));
+    window.scrollTo({ top: 120, behavior: 'smooth' });
+    onNotify(`Editing "${prod.title}". Modify details and click Update.`, 'info');
+  };
+
+  // Cancel editing mode
+  const handleCancelEdit = () => {
+    setEditingProductId(null);
+    setTitle('');
+    setCategory(ADMIN_CATEGORIES[0]);
+    setPrice('');
+    setMrp('');
+    setDescription('');
+    setImageUrl('');
+    setMaterial('');
+    setDimensions('');
+    setIsFeatured(false);
+    setUploadProgress(0);
+  };
+
   // Form Submit: Store metadata into Firebase Firestore
   const handleSubmitProduct = async (e) => {
     e.preventDefault();
@@ -108,25 +142,19 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
         reviewsCount: 1
       };
 
-      await addProductToFirestore(productData);
-
-      if (isFirebaseConnected) {
-        onNotify(`Product "${title}" published to Firebase Cloud & synced across all devices!`, 'success');
+      if (editingProductId) {
+        await updateProductInFirestore(editingProductId, productData);
+        onNotify(`Product "${title}" updated successfully in Firestore!`, 'success');
+        handleCancelEdit();
       } else {
-        onNotify(`Product saved in this browser. Connect Firebase in API Settings to sync to your phone and all devices!`, 'info');
+        await addProductToFirestore(productData);
+        if (isFirebaseConnected) {
+          onNotify(`Product "${title}" published to Firebase Cloud & synced across all devices!`, 'success');
+        } else {
+          onNotify(`Product saved in this browser. Connect Firebase in API Settings to sync!`, 'info');
+        }
+        handleCancelEdit();
       }
-
-      // Reset form
-      setTitle('');
-      setCategory(ADMIN_CATEGORIES[0]);
-      setPrice('');
-      setMrp('');
-      setDescription('');
-      setImageUrl('');
-      setMaterial('');
-      setDimensions('');
-      setIsFeatured(false);
-      setUploadProgress(0);
     } catch (err) {
       console.error('Error saving product:', err);
       onNotify('Failed to publish product. ' + err.message, 'error');
@@ -232,18 +260,30 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
           <div className="lg:col-span-5">
             <div className="bg-white rounded-2xl border border-gray-200/90 shadow-sm p-6 sm:p-7 sticky top-28">
               
-              <div className="flex items-center gap-3 pb-4 mb-5 border-b border-gray-100">
-                <div className="w-10 h-10 rounded-xl bg-[#FCF9F0] border border-[#EEDFA8] flex items-center justify-center text-[#88652D]">
-                  <PlusCircle className="w-5 h-5" />
+              <div className="flex items-center justify-between pb-4 mb-5 border-b border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${editingProductId ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-[#FCF9F0] border border-[#EEDFA8] text-[#88652D]'}`}>
+                    {editingProductId ? <Pencil className="w-5 h-5" /> : <PlusCircle className="w-5 h-5" />}
+                  </div>
+                  <div>
+                    <h2 className="font-['Cinzel'] font-bold text-lg text-gray-900">
+                      {editingProductId ? 'Modify Product' : 'Add New Product'}
+                    </h2>
+                    <p className="text-xs text-gray-500">
+                      {editingProductId ? 'Update details in Firebase Firestore' : 'Syncs to Firestore & updates User Page instantly'}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="font-['Cinzel'] font-bold text-lg text-gray-900">
-                    Add New Product
-                  </h2>
-                  <p className="text-xs text-gray-500">
-                    Syncs to Firestore & updates User Page instantly
-                  </p>
-                </div>
+                {editingProductId && (
+                  <button
+                    type="button"
+                    onClick={handleCancelEdit}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 text-xs font-semibold cursor-pointer transition-colors"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    <span>Cancel</span>
+                  </button>
+                )}
               </div>
 
               <form onSubmit={handleSubmitProduct} className="space-y-4">
@@ -442,24 +482,41 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                   </label>
                 </div>
 
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={submitting || uploading}
-                  className="w-full py-3.5 px-6 rounded-xl font-bold text-xs uppercase tracking-wider bg-gradient-to-r from-[#ECC872] via-[#C5A059] to-[#9A7B2C] text-[#121417] shadow-lg shadow-[#C5A059]/30 hover:shadow-xl hover:shadow-[#C5A059]/40 active:scale-[0.98] transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2 mt-4"
-                >
-                  {submitting ? (
-                    <>
-                      <RefreshCw className="w-4 h-4 animate-spin" />
-                      <span>Saving to Firestore...</span>
-                    </>
-                  ) : (
-                    <>
-                      <PlusCircle className="w-4 h-4" />
-                      <span>Publish to Firestore Catalog</span>
-                    </>
+                {/* Action Buttons: Submit / Update & Cancel */}
+                <div className="flex gap-2.5 mt-4">
+                  {editingProductId && (
+                    <button
+                      type="button"
+                      onClick={handleCancelEdit}
+                      className="px-5 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                    >
+                      <X className="w-4 h-4" />
+                      <span>Cancel</span>
+                    </button>
                   )}
-                </button>
+                  <button
+                    type="submit"
+                    disabled={submitting || uploading}
+                    className="flex-1 py-3.5 px-6 rounded-xl font-bold text-xs uppercase tracking-wider bg-gradient-to-r from-[#ECC872] via-[#C5A059] to-[#9A7B2C] text-[#121417] shadow-lg shadow-[#C5A059]/30 hover:shadow-xl hover:shadow-[#C5A059]/40 active:scale-[0.98] transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    {submitting ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        <span>{editingProductId ? 'Updating in Firestore...' : 'Saving to Firestore...'}</span>
+                      </>
+                    ) : editingProductId ? (
+                      <>
+                        <Pencil className="w-4 h-4" />
+                        <span>Update Product</span>
+                      </>
+                    ) : (
+                      <>
+                        <PlusCircle className="w-4 h-4" />
+                        <span>Publish to Firestore Catalog</span>
+                      </>
+                    )}
+                  </button>
+                </div>
 
               </form>
 
@@ -559,6 +616,15 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                             >
                               <ExternalLink className="w-3.5 h-3.5" />
                             </a>
+
+                            {/* Edit / Modify Action */}
+                            <button
+                              onClick={() => handleStartEdit(prod)}
+                              className="p-1.5 rounded-lg bg-amber-50 text-amber-700 hover:bg-amber-100 transition-colors cursor-pointer"
+                              title="Modify / Edit Product"
+                            >
+                              <Pencil className="w-3.5 h-3.5" />
+                            </button>
 
                             {/* Delete Action */}
                             <button
