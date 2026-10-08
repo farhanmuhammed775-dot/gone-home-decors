@@ -165,14 +165,6 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
 
       {/* 4. About G One Home Décors Story */}
       <AboutSection />
-
-      {/* Quick View Modal */}
-      {selectedProduct && (
-        <ProductDetailModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
     </main>
   );
 };
