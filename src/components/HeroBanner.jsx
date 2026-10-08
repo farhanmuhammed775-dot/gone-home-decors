@@ -1,5 +1,5 @@
 ﻿import React, { useState, useRef } from 'react';
-import { Sparkles, MessageCircle, ArrowRight, Play, Pause, Volume2, VolumeX } from 'lucide-react';
+import { Sparkles, MessageCircle, ArrowRight, Play, Pause, Volume2, VolumeX, ChevronDown } from 'lucide-react';
 
 export const HeroBanner = () => {
   const [isPlaying, setIsPlaying] = useState(true);
@@ -32,7 +32,7 @@ export const HeroBanner = () => {
   };
 
   return (
-    <section className="relative min-h-[80vh] sm:min-h-[85vh] lg:min-h-[90vh] flex items-center justify-center overflow-hidden bg-[#121417]">
+    <section className="relative w-full h-[100dvh] min-h-[100dvh] min-h-screen flex flex-col justify-center items-center overflow-hidden bg-[#121417]">
       
       {/* Autoplaying, Muted, Looped Background Video from Cloudinary */}
       <div className="absolute inset-0 w-full h-full overflow-hidden">
@@ -79,11 +79,11 @@ export const HeroBanner = () => {
         </button>
       </div>
 
-      {/* Hero Content Overlay */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pt-24 sm:pt-28 pb-12 sm:pb-16 text-center text-white">
+      {/* Hero Content Overlay: Perfectly vertically centered and padded for full mobile viewport */}
+      <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 pt-20 sm:pt-24 pb-8 flex flex-col items-center justify-center text-center text-white my-auto">
         
         {/* Brand Tagline Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-[#C5A059]/40 mb-5 shadow-lg">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-[#C5A059]/40 mb-4 sm:mb-5 shadow-lg">
           <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
           <span className="text-[11px] sm:text-xs font-semibold tracking-widest text-[#E8D3A2] uppercase font-['Cinzel']">
             G One Home Décors · Manjeri, Kerala
@@ -91,24 +91,24 @@ export const HeroBanner = () => {
         </div>
 
         {/* Replaced Headline with Customer-Aesthetic, Realistic Title */}
-        <h1 className="font-['Cinzel'] font-bold tracking-wide text-2xl sm:text-4xl md:text-5xl leading-tight sm:leading-snug mb-4 sm:mb-5 drop-shadow-xl">
+        <h1 className="font-['Cinzel'] font-bold tracking-wide text-2xl sm:text-4xl md:text-5xl leading-tight sm:leading-snug mb-3.5 sm:mb-4 drop-shadow-xl max-w-3xl">
           <span className="text-white block sm:inline">Royal Colonial</span>{' '}
           <span className="text-[#C5A059] font-serif italic font-normal">&amp;</span>{' '}
           <span className="gold-gradient-text block sm:inline">Modern Custom Furniture</span>
         </h1>
 
         {/* Narrative Description */}
-        <p className="max-w-xl mx-auto text-xs sm:text-sm md:text-base text-gray-200 font-light leading-relaxed mb-8 drop-shadow">
+        <p className="max-w-xl mx-auto text-xs sm:text-sm md:text-base text-gray-200 font-light leading-relaxed mb-6 sm:mb-8 drop-shadow px-2">
           Handcrafted wooden living sets, architectural staircases, and bespoke luxury interior decor designed to elevate your home.
         </p>
 
         {/* Primary CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-sm sm:max-w-md mx-auto">
           {/* Explore Collection Button */}
           <button
             type="button"
             onClick={scrollToCategories}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl font-['Cinzel'] font-bold text-xs sm:text-sm tracking-wider uppercase bg-gradient-to-r from-[#ECC872] via-[#C5A059] to-[#9A7B2C] text-[#121417] shadow-lg shadow-[#C5A059]/30 hover:shadow-xl hover:shadow-[#C5A059]/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 rounded-xl font-['Cinzel'] font-bold text-xs sm:text-sm tracking-wider uppercase bg-gradient-to-r from-[#ECC872] via-[#C5A059] to-[#9A7B2C] text-[#121417] shadow-lg shadow-[#C5A059]/30 hover:shadow-xl hover:shadow-[#C5A059]/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer"
           >
             <span>Explore Collections</span>
             <ArrowRight className="w-4 h-4" />
@@ -127,6 +127,19 @@ export const HeroBanner = () => {
         </div>
 
       </div>
+
+      {/* Subtle Scroll Down Prompt for Mobile */}
+      <button
+        type="button"
+        onClick={scrollToCategories}
+        className="relative z-10 pb-4 text-gray-400 hover:text-[#C5A059] flex flex-col items-center gap-1 transition-colors cursor-pointer group mt-auto"
+        aria-label="Scroll to Categories"
+      >
+        <span className="text-[10px] tracking-widest uppercase font-mono text-gray-400 group-hover:text-[#C5A059]">
+          Scroll to explore
+        </span>
+        <ChevronDown className="w-4 h-4 animate-bounce text-[#C5A059]" />
+      </button>
 
     </section>
   );
