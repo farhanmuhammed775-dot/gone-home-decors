@@ -6,6 +6,7 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminLoginModal } from './components/AdminLoginModal';
 import { subscribeToProducts, getLocalProducts } from './services/firebase';
 import { MessageCircle } from 'lucide-react';
+import { Toast } from './components/Toast';
 
 export function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home' | 'admin'
