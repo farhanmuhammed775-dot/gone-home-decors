@@ -31,7 +31,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
   const [price, setPrice] = useState('');
   const [mrp, setMrp] = useState('');
   const [description, setDescription] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [images, setImages] = useState([]);
   const [material, setMaterial] = useState('');
   const [dimensions, setDimensions] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
@@ -49,10 +49,14 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
 
   // Handle Cloudinary Official Widget
   const handleOpenCloudinaryWidget = () => {
+    if (images.length >= 4) {
+      onNotify('Maximum 4 images allowed per product.', 'error');
+      return;
+    }
     openCloudinaryWidget(
       (secureUrl) => {
-        setImageUrl(secureUrl);
-        onNotify('Media uploaded successfully to Cloudinary!', 'success');
+        setImages(prev => [...prev, secureUrl]);
+        onNotify('Photo uploaded successfully!', 'success');
       },
       (error) => {
         onNotify(error.message || 'Cloudinary widget upload failed', 'error');
@@ -93,7 +97,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
     setPrice(prod.price || '');
     setMrp(prod.mrp || '');
     setDescription(prod.description || '');
-    setImageUrl(prod.image_url || '');
+    setImages(prod.images || (prod.image_url ? [prod.image_url] : []));
     setMaterial(prod.material || '');
     setDimensions(prod.dimensions || '');
     setIsFeatured(Boolean(prod.isFeatured));
@@ -109,7 +113,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
     setPrice('');
     setMrp('');
     setDescription('');
-    setImageUrl('');
+    setImages([]);
     setMaterial('');
     setDimensions('');
     setIsFeatured(false);
@@ -134,7 +138,8 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
         price: Number(price),
         mrp: mrp ? Number(mrp) : Math.round(Number(price) * 1.25),
         description: description.trim() || 'Custom handcrafted luxury home decor piece by G One Home Décors.',
-        image_url: imageUrl.trim() || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1000&auto=format&fit=crop',
+        images: images,
+        image_url: images.length > 0 ? images[0] : 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1000&auto=format&fit=crop',
         material: material.trim() || 'Grade-A Solid Wood & Brass',
         dimensions: dimensions.trim() || 'Bespoke Custom Measurements',
         isFeatured: Boolean(isFeatured),
@@ -396,20 +401,29 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                   )}
 
                   {/* Media Preview Box */}
-                  {imageUrl && (
-                    <div className="mt-2 relative rounded-xl overflow-hidden border border-[#C5A059]/40 bg-gray-50 max-h-36">
-                      <img
-                        src={imageUrl}
-                        alt="Preview"
-                        className="w-full h-32 object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setImageUrl('')}
-                        className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/60 text-white hover:bg-black text-[10px]"
-                      >
-                        ✕
-                      </button>
+                  {images.length > 0 && (
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      {images.map((imgUrl, idx) => (
+                        <div key={idx} className="relative rounded-xl overflow-hidden border border-[#C5A059]/40 bg-gray-50 h-24">
+                          <img
+                            src={imgUrl}
+                            alt={`Preview ${idx + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setImages(prev => prev.filter((_, i) => i !== idx))}
+                            className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/60 text-white hover:bg-black text-[10px]"
+                          >
+                            ✕
+                          </button>
+                          {idx === 0 && (
+                            <span className="absolute bottom-1.5 left-1.5 text-[8px] font-bold uppercase bg-[#121417]/80 text-[#C5A059] px-1.5 py-0.5 rounded backdrop-blur-sm">
+                              Primary Image
+                            </span>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>

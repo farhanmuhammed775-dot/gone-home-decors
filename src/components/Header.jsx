@@ -1,11 +1,11 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Menu, 
-  X, 
-  Phone, 
-  MessageCircle, 
-  MapPin, 
-  Search, 
+import {
+  Menu,
+  X,
+  Phone,
+  MessageCircle,
+  MapPin,
+  Search,
   ShoppingBag,
   ExternalLink
 } from 'lucide-react';
@@ -14,7 +14,7 @@ import { InstagramIcon } from './InstagramIcon';
 export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  
+
   // Secret 3-clicks logo trigger for Admin Login
   const clickCountRef = useRef(0);
   const resetTimerRef = useRef(null);
@@ -68,8 +68,8 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
               <span className="hidden md:inline">Showroom:</span> Manjeri, Malappuram, Kerala
             </span>
             <span className="hidden sm:inline text-gray-500">|</span>
-            <a 
-              href="tel:+918606854763" 
+            <a
+              href="tel:+918606854763"
               className="flex items-center gap-1.5 hover:text-[#C5A059] transition-colors"
             >
               <Phone className="w-3.5 h-3.5 text-[#C5A059]" />
@@ -82,18 +82,18 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
               ✦ Leads to Dreamy World ✦
             </span>
             <div className="flex items-center gap-2 pl-2 border-l border-gray-700">
-              <a 
-                href={instagramUrl} 
-                target="_blank" 
+              <a
+                href={instagramUrl}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-[#C5A059] transition-colors p-1"
                 title="Follow on Instagram"
               >
                 <InstagramIcon className="w-3.5 h-3.5" />
               </a>
-              <a 
-                href={whatsappUrl} 
-                target="_blank" 
+              <a
+                href={whatsappUrl}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-[#25D366] transition-colors p-1"
                 title="Chat on WhatsApp"
@@ -108,9 +108,9 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
       {/* Main Glassmorphic Navigation Bar */}
       <div className={`transition-all duration-300 ${scrolled ? 'bg-[#121417]/95 shadow-xl py-2.5 border-b border-[#C5A059]/30' : 'bg-[#121417]/75 backdrop-blur-md py-3.5 border-b border-white/10'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-          
+
           {/* Mobile Hamburger Button */}
-          <button 
+          <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 text-white hover:text-[#C5A059] focus:outline-none transition-colors cursor-pointer"
@@ -121,7 +121,7 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
           {/* Brand Logo with 3-Clicks Secret Admin Trigger */}
           <div className="flex items-center select-none">
-            <div 
+            <div
               onClick={handleLogoClick}
               role="button"
               tabIndex={0}
@@ -129,9 +129,9 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
               className="flex items-center gap-3 group cursor-pointer"
             >
               <div className="relative overflow-hidden rounded-full p-1 bg-white/10 border border-[#C5A059]/40 shadow-md group-hover:border-[#C5A059] transition-all">
-                <img 
-                  src="/assets/logo.png" 
-                  alt="G One Home Décors Logo" 
+                <img
+                  src="/assets/logo.png"
+                  alt="G One Home Décors Logo"
                   className="h-11 w-11 sm:h-13 sm:w-13 object-contain rounded-full transform group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
@@ -153,30 +153,30 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-200">
-            <a 
-              href="#products" 
+            <a
+              href="#products"
               onClick={(e) => { e.preventDefault(); scrollToSection('products'); }}
               className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
             >
               Shop
             </a>
-            <a 
-              href="#about" 
+            <a
+              href="#about"
               onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}
               className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
             >
               Our Craft
             </a>
-            <a 
-              href="#contact" 
+            <a
+              href="#contact"
               onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}
               className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
             >
               Contact Us
             </a>
-            
+
             {/* Quick Chat WhatsApp Link */}
-            <a 
+            <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -201,22 +201,20 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
       </div>
 
       {/* Responsive Hamburger Mobile Drawer */}
-      <div 
-        className={`md:hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-lg transition-opacity duration-300 ${
-          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+      <div
+        className={`md:hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-lg transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
         onClick={() => setMobileMenuOpen(false)}
       >
-        <div 
-          className={`w-[82%] max-w-sm h-full bg-[#171A1E] text-white p-6 shadow-2xl flex flex-col justify-between border-r border-[#C5A059]/30 transform transition-transform duration-300 ${
-            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+        <div
+          className={`w-[82%] max-w-sm h-full bg-[#171A1E] text-white p-6 shadow-2xl flex flex-col justify-between border-r border-[#C5A059]/30 transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div>
             {/* Drawer Header with 3-clicks logo trigger */}
             <div className="flex items-center justify-between pb-5 border-b border-white/10">
-              <div 
+              <div
                 onClick={handleLogoClick}
                 className="flex items-center gap-2.5 cursor-pointer"
               >
@@ -226,7 +224,7 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
                   <p className="text-[10px] text-[#C5A059] tracking-wider uppercase font-medium">Leads to dreamy world</p>
                 </div>
               </div>
-              <button 
+              <button
                 onClick={() => setMobileMenuOpen(false)}
                 className="p-1.5 text-gray-400 hover:text-white cursor-pointer"
               >
@@ -236,6 +234,18 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
             {/* Mobile Navigation List */}
             <nav className="mt-6 flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={() => { if (currentView !== 'home') { window.history.pushState({}, '', '/'); window.dispatchEvent(new PopStateEvent('popstate')); } setMobileMenuOpen(false); }}
+                className="flex items-center justify-between w-full p-3 rounded-xl hover:bg-white/5 text-left text-gray-100 font-medium transition-colors cursor-pointer"
+              >
+                <span className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-[#C5A059]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                  <span>Home</span>
+                </span>
+                <span className="text-xs text-gray-400">Main Page</span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => scrollToSection('products')}

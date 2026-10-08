@@ -4,6 +4,8 @@ import { formatINR } from '../components/ProductCard';
 
 export const ProductPage = ({ products, onBack }) => {
     const [product, setProduct] = useState(null);
+    const [selectedImage, setSelectedImage] = useState('');
+    const [productImages, setProductImages] = useState([]);
 
     useEffect(() => {
         // Extract the ID from the path: /product/:id
@@ -15,6 +17,9 @@ export const ProductPage = ({ products, onBack }) => {
 
             if (found) {
                 document.title = `${found.title} - G One Home Décors`;
+                const imgs = (found.images && found.images.length > 0) ? found.images : (found.image_url ? [found.image_url] : ['/assets/logo.png']);
+                setProductImages(imgs);
+                setSelectedImage(imgs[0]);
             }
         }
     }, [products]);
@@ -58,18 +63,37 @@ export const ProductPage = ({ products, onBack }) => {
 
                 <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden flex flex-col md:flex-row mb-12">
 
-                    {/* Left Column: Image */}
-                    <div className="w-full md:w-1/2 bg-gray-100 relative min-h-[300px] md:min-h-[500px]">
-                        <img
-                            src={product.image_url || '/assets/logo.png'}
-                            alt={product.title}
-                            className="w-full h-full object-cover"
-                        />
-                        <div className="absolute top-4 left-4 z-10">
-                            <span className="px-3 md:px-4 py-1 sm:py-1.5 rounded-lg text-xs md:text-sm font-semibold uppercase tracking-wider bg-[#121417]/85 text-[#E8D3A2] backdrop-blur-md border border-[#C5A059]/40 shadow-sm">
-                                {product.category}
-                            </span>
+                    {/* Left Column: Image Gallery */}
+                    <div className="w-full md:w-1/2 flex flex-col p-4 md:p-6 pb-0">
+                        <div className="bg-gray-100 relative rounded-2xl overflow-hidden aspect-[4/3] w-full mb-3 shadow-inner">
+                            <img
+                                src={selectedImage}
+                                alt={product.title}
+                                className="w-full h-full object-cover transition-opacity duration-300"
+                            />
+                            <div className="absolute top-4 left-4 z-10">
+                                <span className="px-3 md:px-4 py-1 sm:py-1.5 rounded-lg text-xs md:text-sm font-semibold uppercase tracking-wider bg-[#121417]/85 text-[#E8D3A2] backdrop-blur-md border border-[#C5A059]/40 shadow-sm">
+                                    {product.category}
+                                </span>
+                            </div>
                         </div>
+
+                        {/* Thumbnail Gallery (Only render if >1 images) */}
+                        {productImages.length > 1 && (
+                            <div className="flex gap-2.5 pb-2 overflow-x-auto scrollbar-hide py-1">
+                                {productImages.map((img, idx) => (
+                                    <button
+                                        key={idx}
+                                        type="button"
+                                        onClick={() => setSelectedImage(img)}
+                                        className={`w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${selectedImage === img ? 'border-[#C5A059] shadow-md scale-95 opacity-100' : 'border-transparent opacity-60 hover:opacity-100 hover:scale-[0.98]'
+                                            }`}
+                                    >
+                                        <img src={img} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Right Column: Details */}

@@ -41,6 +41,7 @@ export function App() {
         }
       } else if (isTryingProduct) {
         setCurrentView('product');
+        window.scrollTo({ top: 0, behavior: 'instant' });
       } else {
         setCurrentView('home');
       }
