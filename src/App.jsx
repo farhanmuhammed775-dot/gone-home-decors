@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
+import { ProductPage } from './pages/ProductPage';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminLoginModal } from './components/AdminLoginModal';
 import { subscribeToProducts, getLocalProducts } from './services/firebase';
@@ -9,7 +10,7 @@ import { MessageCircle } from 'lucide-react';
 import { Toast } from './components/Toast';
 
 export function App() {
-  const [currentView, setCurrentView] = useState('home'); // 'home' | 'admin'
+  const [currentView, setCurrentView] = useState('home'); // 'home' | 'admin' | 'product'
   const [products, setProducts] = useState(() => getLocalProducts());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -28,6 +29,7 @@ export function App() {
       const path = window.location.pathname;
       const hash = window.location.hash;
       const isTryingAdmin = path === '/admin' || hash === '#admin';
+      const isTryingProduct = path.startsWith('/product/');
 
       if (isTryingAdmin) {
         const isAuth = sessionStorage.getItem('gone_admin_auth') === 'true';
@@ -37,6 +39,8 @@ export function App() {
           setCurrentView('home');
           setShowAdminLoginModal(true);
         }
+      } else if (isTryingProduct) {
+        setCurrentView('product');
       } else {
         setCurrentView('home');
       }
@@ -138,6 +142,11 @@ export function App() {
             onBackToStore={() => navigateTo('home')}
             onLogout={handleLogout}
             onNotify={showNotification}
+          />
+        ) : currentView === 'product' ? (
+          <ProductPage
+            products={products}
+            onBack={() => navigateTo('home')}
           />
         ) : (
           <HomePage

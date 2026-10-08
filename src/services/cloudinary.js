@@ -40,6 +40,9 @@ export const openCloudinaryWidget = (onSuccess, onError) => {
         clientAllowedFormats: ['image', 'video'],
         maxFileSize: 50000000, // 50MB
         theme: 'minimal',
+        cropping: true,
+        croppingAspectRatio: 4 / 3,
+        croppingShowDimensions: true,
         styles: {
           palette: {
             window: '#1C1F24',

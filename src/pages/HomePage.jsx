@@ -2,14 +2,12 @@
 import { HeroBanner } from '../components/HeroBanner';
 import { CategoryNav } from '../components/CategoryNav';
 import { ProductCard } from '../components/ProductCard';
-import { ProductDetailModal } from '../components/ProductDetailModal';
 import { AboutSection } from '../components/AboutSection';
 import { Search, SlidersHorizontal, Sparkles, AlertCircle, ArrowUpRight } from 'lucide-react';
 
 export const HomePage = ({ products, activeCategory, setActiveCategory, loading, error }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('featured');
-  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Calculate category product counts
   const productCounts = useMemo(() => {
@@ -59,7 +57,7 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
 
       {/* 3. Products Section */}
       <section id="products" className="py-10 sm:py-14 max-w-7xl mx-auto px-4 sm:px-6">
-        
+
         {/* Controls Bar: Active Category Heading, Search & Sort */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200/80 shadow-xs">
           <div>
@@ -132,7 +130,10 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
                   <ProductCard
                     key={product.id}
                     product={product}
-                    onQuickView={(p) => setSelectedProduct(p)}
+                    onQuickView={(p) => {
+                      window.history.pushState({}, '', `/product/${p.id}`);
+                      window.dispatchEvent(new PopStateEvent('popstate'));
+                    }}
                   />
                 ))}
               </div>
