@@ -64,30 +64,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
     );
   };
 
-  // Handle direct file upload via Cloudinary REST API
-  const handleDirectFileUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setUploading(true);
-    setUploadProgress(0);
-
-    try {
-      const secureUrl = await uploadFileDirectly(file, (percent) => {
-        setUploadProgress(percent);
-      });
-      setImageUrl(secureUrl);
-      onNotify('Media uploaded to Cloudinary successfully!', 'success');
-    } catch (err) {
-      console.warn('Direct upload error:', err);
-      // Create local object URL as fallback preview if cloud upload preset is pending
-      const localPreview = URL.createObjectURL(file);
-      setImageUrl(localPreview);
-      onNotify('Preview loaded locally. Configure Cloudinary credentials in Settings for cloud sync.', 'info');
-    } finally {
-      setUploading(false);
-    }
-  };
+  // Handle direct file upload via Cloudinary REST API - REMOVED (Enforce Widget use for Auto-Crop)
 
   // Start editing an existing product
   const handleStartEdit = (prod) => {
@@ -376,16 +353,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                     </button>
                   </div>
 
-                  {/* Or Direct Image URL input */}
-                  <div className="relative">
-                    <input
-                      type="url"
-                      placeholder="Or paste secure image/video URL directly..."
-                      value={imageUrl}
-                      onChange={(e) => setImageUrl(e.target.value)}
-                      className="w-full px-3.5 py-2 text-xs rounded-xl border border-gray-300 focus:outline-none focus:border-[#C5A059]"
-                    />
-                  </div>
+                  {/* Direct Image URL input removed to enforce Cloudinary Widget usage */}
 
                   {/* Progress indicator */}
                   {uploading && (
