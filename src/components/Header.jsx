@@ -14,6 +14,8 @@ import { InstagramIcon } from './InstagramIcon';
 export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
 
   // Secret 3-clicks logo trigger for Admin Login
   const clickCountRef = useRef(0);
@@ -40,9 +42,18 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 30);
+
+      // Auto-hide logic for professional look
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setHidden(true); // Scrolling down past 100px: Hide header
+      } else if (currentScrollY < lastScrollY.current || currentScrollY < 50) {
+        setHidden(false); // Scrolling up: Show header
+      }
+      lastScrollY.current = currentScrollY;
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -85,7 +96,7 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-500 ease-in-out ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
       {/* Top Announcement & Quick Contact Bar */}
       <div className="bg-[#121417]/90 text-white text-xs border-b border-[#C5A059]/20 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 py-2 flex flex-col sm:flex-row items-center justify-between gap-2">

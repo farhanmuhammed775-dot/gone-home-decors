@@ -55,7 +55,7 @@ export const ProductPage = ({ products, onBack }) => {
                 {/* Breadcrumb Navigation */}
                 <button
                     onClick={onBack}
-                    className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#C5A059] transition-colors mb-8 cursor-pointer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest text-gray-600 bg-white border border-gray-200 shadow-[0_2px_8px_-3px_rgba(0,0,0,0.1)] hover:border-[#C5A059] hover:text-[#C5A059] hover:shadow-[0_4px_12px_-4px_rgba(197,160,89,0.3)] hover:-translate-y-0.5 cursor-pointer transition-all duration-300 mb-8"
                 >
                     <ArrowLeft className="w-4 h-4" />
                     <span>Back to Collections</span>
