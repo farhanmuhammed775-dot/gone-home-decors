@@ -51,10 +51,37 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
   const scrollToSection = (id) => {
     setMobileMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    if (currentView !== 'home') {
+      // If we are not on the homepage (e.g. on a Product Page), first route back to home
+      window.history.pushState({}, '', '/');
+      window.dispatchEvent(new PopStateEvent('popstate'));
+      // Wait for React to render the homepage, then scroll
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 150);
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (id === 'top') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
+  };
+
+  const handleHomeClick = (e) => {
+    e.preventDefault();
+    if (currentView !== 'home') {
+      window.history.pushState({}, '', '/');
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -153,6 +180,13 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-200">
+            <a
+              href="/"
+              onClick={handleHomeClick}
+              className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
+            >
+              Home
+            </a>
             <a
               href="#products"
               onClick={(e) => { e.preventDefault(); scrollToSection('products'); }}

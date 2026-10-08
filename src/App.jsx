@@ -121,7 +121,7 @@ export function App() {
     }, 4500);
   };
 
-  const whatsappDirectUrl = "https://wa.me/+918606854763?text=Hi%2C%20I%20have%20an%20inquiry%20about%20G%20One%20Home%20D%C3%A9cors.";
+  const whatsappDirectUrl = `https://wa.me/+918606854763?text=${encodeURIComponent("Hello G One Home Décors! I'm reaching out to explore your luxury furniture collections and find the perfect addition to my home.")}`;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-[#1F2421] selection:bg-[#C5A059]/20 selection:text-[#88652D]">
