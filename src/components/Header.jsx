@@ -103,28 +103,20 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
       <div className={`transition-all duration-300 ${scrolled ? 'bg-[#121417]/95 shadow-xl py-2.5 border-b border-[#C5A059]/30' : 'bg-[#121417]/75 backdrop-blur-md py-3.5 border-b border-white/10'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
 
-          {/* Brand Logo with 3-Clicks Secret Admin Trigger */}
+          {/* Brand Logo */}
           <div className="flex items-center select-none">
             <div
               onClick={handleLogoClick}
               role="button"
               tabIndex={0}
               title="G One Home Décors"
-              className="flex items-center gap-3 sm:gap-4 group cursor-pointer"
+              className="group cursor-pointer"
             >
               <img
                 src="/assets/logo.png"
                 alt="G One Home Décors Logo"
-                className="h-10 sm:h-12 w-auto object-contain transform group-hover:scale-105 transition-transform duration-300"
+                className="max-h-[48px] sm:max-h-[56px] w-auto object-contain transform group-hover:scale-105 transition-transform duration-300"
               />
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="font-['Cinzel'] text-lg sm:text-2xl font-bold tracking-wider text-white">
-                  G ONE
-                </span>
-                <span className="text-[#C5A059] font-['Cinzel'] text-sm sm:text-base font-semibold tracking-widest uppercase">
-                  HOME DÉCORS
-                </span>
-              </div>
             </div>
           </div>
 
@@ -199,13 +191,9 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
             <div className="flex items-center justify-between pb-5 border-b border-white/10">
               <div
                 onClick={handleLogoClick}
-                className="flex items-center gap-2.5 cursor-pointer"
+                className="cursor-pointer"
               >
-                <img src="/assets/logo.png" alt="G One Home Decors" className="h-8 w-auto object-contain" />
-                <div className="flex items-center gap-1.5">
-                  <span className="font-['Cinzel'] font-bold text-white text-base">G ONE</span>
-                  <span className="font-['Cinzel'] font-semibold text-[#C5A059] text-xs uppercase tracking-widest">HOME DÉCORS</span>
-                </div>
+                <img src="/assets/logo.png" alt="G One Home Decors" className="max-h-[40px] w-auto object-contain" />
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
