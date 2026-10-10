@@ -44,6 +44,17 @@ export function App() {
         window.scrollTo({ top: 0, behavior: 'instant' });
       } else {
         setCurrentView('home');
+        // Manually restore scroll state specifically for mobile layouts changing dynamically
+        setTimeout(() => {
+          const savedScroll = sessionStorage.getItem('gone_scroll_pos');
+          if (savedScroll) {
+            window.scrollTo({ top: parseInt(savedScroll, 10), behavior: 'instant' });
+            sessionStorage.removeItem('gone_scroll_pos');
+          } else if (window.location.hash !== '#products' && window.location.hash !== '#about' && window.location.hash !== '#contact') {
+            // Only force top if there's no specific hash target and no saved scroll
+            // window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }, 50); // slight delay to allow DOM to paint the Product Cards
       }
     };
 

@@ -146,7 +146,8 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
                     key={product.id}
                     product={product}
                     onQuickView={(p) => {
-                      window.history.pushState({}, '', `/product/${p.id}`);
+                      sessionStorage.setItem('gone_scroll_pos', window.scrollY.toString());
+                      window.history.pushState({ page: 'home' }, '', `/product/${p.id}`);
                       window.dispatchEvent(new PopStateEvent('popstate'));
                     }}
                   />
