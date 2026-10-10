@@ -101,10 +101,10 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
       {/* Main Glassmorphic Navigation Bar */}
       <div className={`transition-all duration-300 ${scrolled ? 'bg-[#121417]/95 shadow-xl border-b border-[#C5A059]/30' : 'bg-[#121417]/75 backdrop-blur-md border-b border-white/10'}`}>
-        <div className="max-w-7xl mx-auto px-[15px] py-[10px] min-h-[75px] flex items-center justify-between w-full">
+        <div className="max-w-7xl mx-auto px-[15px] py-[8px] min-h-[75px] flex items-center justify-between w-full">
 
           {/* Left/Center Content: Logo and Typography (navbar-left-group) */}
-          <div className="flex items-center gap-[15px] flex-1">
+          <div className="flex items-center gap-[12px] flex-1">
             {/* Logo: Left-to-Center spanning (navbar-logo) */}
             <div
               onClick={handleLogoClick}
@@ -116,13 +116,13 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
               <img
                 src="/assets/logo.png"
                 alt="G One Logo"
-                className="h-[50px] w-auto max-w-[160px] object-contain block transform group-hover:scale-105 transition-transform duration-300"
+                className="h-auto w-[140px] max-h-[55px] object-contain block transform group-hover:scale-105 transition-transform duration-300"
               />
             </div>
 
             {/* Typography: Stacked Two-Line Text (navbar-brand-text) */}
-            <div className="flex flex-col justify-center leading-[1.2]">
-              <span className="font-['Cinzel'] text-[0.95rem] font-bold text-[#ffffff] tracking-[1px]">
+            <div className="flex flex-col justify-center leading-[1.15]">
+              <span className="font-['Cinzel'] text-[1rem] font-bold text-[#ffffff] tracking-[1px]">
                 G ONE
               </span>
               <span className="font-['Cinzel'] text-[0.75rem] font-medium text-[#e5c158] tracking-[1.5px] uppercase">
