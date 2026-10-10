@@ -101,41 +101,40 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
       {/* Main Glassmorphic Navigation Bar */}
       <div className={`transition-all duration-300 ${scrolled ? 'bg-[#121417]/95 shadow-xl py-2.5 border-b border-[#C5A059]/30' : 'bg-[#121417]/75 backdrop-blur-md py-3.5 border-b border-white/10'}`}>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between w-full">
 
-          {/* Left: Brand Graphic Logo */}
-          <div className="flex items-center select-none z-10">
+          {/* Left/Center Content: Logo and Typography */}
+          <div className="flex items-center gap-3 sm:gap-4 lg:gap-5 flex-1 min-w-0">
+            {/* Logo: Left-to-Center spanning */}
             <div
               onClick={handleLogoClick}
               role="button"
               tabIndex={0}
               title="G One Home Décors"
-              className="group cursor-pointer"
+              className="group cursor-pointer shrink-0"
             >
               <img
                 src="/assets/logo.png"
                 alt="G One Logo"
-                className="max-h-[48px] sm:max-h-[56px] w-auto object-contain transform group-hover:scale-105 transition-transform duration-300"
+                className="max-h-[44px] sm:max-h-[52px] w-auto object-contain transform group-hover:scale-105 transition-transform duration-300"
               />
             </div>
-          </div>
 
-          {/* Center: Brand Name Typography */}
-          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center pointer-events-none whitespace-nowrap z-0">
-            <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
-              <span className="font-['Cinzel'] text-lg sm:text-2xl font-bold tracking-wider text-white">
+            {/* Typography: Center-to-Right extending */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-baseline gap-0.5 sm:gap-2 truncate">
+              <span className="font-['Cinzel'] text-sm sm:text-base lg:text-lg font-bold tracking-widest text-white truncate">
                 G ONE
               </span>
-              <span className="text-[#C5A059] font-['Cinzel'] text-sm sm:text-base font-semibold tracking-widest uppercase">
+              <span className="text-[#C5A059] font-['Cinzel'] text-[10px] sm:text-xs lg:text-sm font-semibold tracking-widest uppercase truncate">
                 HOME DÉCORS
               </span>
             </div>
           </div>
 
           {/* Right: Navigation & Mobile Hamburger */}
-          <div className="flex items-center justify-end z-10">
+          <div className="flex items-center justify-end shrink-0 pl-4 z-10">
             {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-200 mr-4 lg:mr-0">
+            <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-200">
               <a
                 href="/"
                 onClick={handleHomeClick}
@@ -181,7 +180,7 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-white hover:text-[#C5A059] focus:outline-none transition-colors cursor-pointer"
+              className="md:hidden p-2 text-white hover:text-[#C5A059] focus:outline-none transition-colors cursor-pointer ml-3 sm:ml-4"
               aria-label="Toggle Hamburger Menu"
             >
               {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
