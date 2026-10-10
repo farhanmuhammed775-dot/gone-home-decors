@@ -97,65 +97,11 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-500 ease-in-out ${hidden ? '-translate-y-full' : 'translate-y-0'}`}>
-      {/* Top Announcement & Quick Contact Bar */}
-      <div className="bg-[#121417]/90 text-white text-xs border-b border-[#C5A059]/20 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 py-2 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-4 text-gray-300">
-            <span className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span className="hidden md:inline">Showroom:</span> Manjeri, Malappuram, Kerala
-            </span>
-            <span className="hidden sm:inline text-gray-500">|</span>
-            <a
-              href="tel:+918606854763"
-              className="flex items-center gap-1.5 hover:text-[#C5A059] transition-colors"
-            >
-              <Phone className="w-3.5 h-3.5 text-[#C5A059]" />
-              +91 8606854763
-            </a>
-          </div>
 
-          <div className="flex items-center gap-4">
-            <span className="text-[#E8D3A2] tracking-wider uppercase text-[10px] sm:text-xs font-semibold">
-              ✦ Leads to Dreamy World ✦
-            </span>
-            <div className="flex items-center gap-2 pl-2 border-l border-gray-700">
-              <a
-                href={instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 hover:text-[#C5A059] transition-colors p-1"
-                title="Follow on Instagram"
-              >
-                <InstagramIcon className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-300 hover:text-[#25D366] transition-colors p-1"
-                title="Chat on WhatsApp"
-              >
-                <MessageCircle className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Main Glassmorphic Navigation Bar */}
       <div className={`transition-all duration-300 ${scrolled ? 'bg-[#121417]/95 shadow-xl py-2.5 border-b border-[#C5A059]/30' : 'bg-[#121417]/75 backdrop-blur-md py-3.5 border-b border-white/10'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
-
-          {/* Mobile Hamburger Button */}
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-white hover:text-[#C5A059] focus:outline-none transition-colors cursor-pointer"
-            aria-label="Toggle Hamburger Menu"
-          >
-            {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-          </button>
 
           {/* Brand Logo with 3-Clicks Secret Admin Trigger */}
           <div className="flex items-center select-none">
@@ -164,27 +110,20 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
               role="button"
               tabIndex={0}
               title="G One Home Décors"
-              className="flex items-center gap-3 group cursor-pointer"
+              className="flex items-center gap-3 sm:gap-4 group cursor-pointer"
             >
-              <div className="relative overflow-hidden rounded-full p-1 bg-white/10 border border-[#C5A059]/40 shadow-md group-hover:border-[#C5A059] transition-all">
-                <img
-                  src="/assets/logo.png"
-                  alt="G One Home Décors Logo"
-                  className="h-11 w-11 sm:h-13 sm:w-13 object-contain rounded-full transform group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="text-left">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-['Cinzel'] text-lg sm:text-2xl font-bold tracking-wider text-white">
-                    G ONE
-                  </span>
-                  <span className="text-[#C5A059] font-['Cinzel'] text-xs sm:text-sm font-semibold tracking-widest uppercase">
-                    HOME DÉCORS
-                  </span>
-                </div>
-                <p className="text-[10px] sm:text-[11px] text-[#E8D3A2] tracking-widest uppercase font-medium">
-                  Leads to dreamy world
-                </p>
+              <img
+                src="/assets/logo.png"
+                alt="G One Home Décors Logo"
+                className="h-10 sm:h-12 w-auto object-contain transform group-hover:scale-105 transition-transform duration-300"
+              />
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="font-['Cinzel'] text-lg sm:text-2xl font-bold tracking-wider text-white">
+                  G ONE
+                </span>
+                <span className="text-[#C5A059] font-['Cinzel'] text-sm sm:text-base font-semibold tracking-widest uppercase">
+                  HOME DÉCORS
+                </span>
               </div>
             </div>
           </div>
@@ -232,16 +171,15 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
             </a>
           </nav>
 
-          {/* Right Action Button: Search */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => scrollToSection('products')}
-              className="flex items-center gap-2 text-xs uppercase tracking-wider text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 px-3.5 py-2 rounded-xl border border-white/10 transition-colors cursor-pointer"
-            >
-              <Search className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span className="hidden sm:inline">Search</span>
-            </button>
-          </div>
+          {/* Mobile Hamburger Button (Moved to right) */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 text-white hover:text-[#C5A059] focus:outline-none transition-colors cursor-pointer"
+            aria-label="Toggle Hamburger Menu"
+          >
+            {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+          </button>
         </div>
       </div>
 
@@ -263,10 +201,10 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
                 onClick={handleLogoClick}
                 className="flex items-center gap-2.5 cursor-pointer"
               >
-                <img src="/assets/logo.png" alt="G One Home Decors" className="w-9 h-9 object-contain rounded-full" />
-                <div>
-                  <h3 className="font-['Cinzel'] font-bold text-white text-base">G ONE</h3>
-                  <p className="text-[10px] text-[#C5A059] tracking-wider uppercase font-medium">Leads to dreamy world</p>
+                <img src="/assets/logo.png" alt="G One Home Decors" className="h-8 w-auto object-contain" />
+                <div className="flex items-center gap-1.5">
+                  <span className="font-['Cinzel'] font-bold text-white text-base">G ONE</span>
+                  <span className="font-['Cinzel'] font-semibold text-[#C5A059] text-xs uppercase tracking-widest">HOME DÉCORS</span>
                 </div>
               </div>
               <button
