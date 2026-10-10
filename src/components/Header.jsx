@@ -101,10 +101,10 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
       {/* Main Glassmorphic Navigation Bar */}
       <div className={`transition-all duration-300 ${scrolled ? 'bg-[#121417]/95 shadow-xl py-2.5 border-b border-[#C5A059]/30' : 'bg-[#121417]/75 backdrop-blur-md py-3.5 border-b border-white/10'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between w-full">
 
-          {/* Brand Logo */}
-          <div className="flex items-center select-none">
+          {/* Left: Brand Graphic Logo */}
+          <div className="flex items-center select-none z-10">
             <div
               onClick={handleLogoClick}
               role="button"
@@ -114,64 +114,79 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
             >
               <img
                 src="/assets/logo.png"
-                alt="G One Home Décors Logo"
+                alt="G One Logo"
                 className="max-h-[48px] sm:max-h-[56px] w-auto object-contain transform group-hover:scale-105 transition-transform duration-300"
               />
             </div>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-200">
-            <a
-              href="/"
-              onClick={handleHomeClick}
-              className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
-            >
-              Home
-            </a>
-            <a
-              href="#products"
-              onClick={(e) => { e.preventDefault(); scrollToSection('products'); }}
-              className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
-            >
-              Shop
-            </a>
-            <a
-              href="#about"
-              onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}
-              className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
-            >
-              Our Craft
-            </a>
-            <a
-              href="#contact"
-              onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}
-              className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
-            >
-              Contact Us
-            </a>
+          {/* Center: Brand Name Typography */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center pointer-events-none whitespace-nowrap z-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
+              <span className="font-['Cinzel'] text-lg sm:text-2xl font-bold tracking-wider text-white">
+                G ONE
+              </span>
+              <span className="text-[#C5A059] font-['Cinzel'] text-sm sm:text-base font-semibold tracking-widest uppercase">
+                HOME DÉCORS
+              </span>
+            </div>
+          </div>
 
-            {/* Quick Chat WhatsApp Link */}
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#25D366]/20 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all text-xs font-semibold border border-[#25D366]/40"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span>Quick Chat</span>
-            </a>
-          </nav>
+          {/* Right: Navigation & Mobile Hamburger */}
+          <div className="flex items-center justify-end z-10">
+            {/* Desktop Navigation Links */}
+            <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-200 mr-4 lg:mr-0">
+              <a
+                href="/"
+                onClick={handleHomeClick}
+                className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
+              >
+                Home
+              </a>
+              <a
+                href="#products"
+                onClick={(e) => { e.preventDefault(); scrollToSection('products'); }}
+                className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
+              >
+                Shop
+              </a>
+              <a
+                href="#about"
+                onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}
+                className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
+              >
+                Our Craft
+              </a>
+              <a
+                href="#contact"
+                onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}
+                className="hover:text-[#C5A059] transition-colors tracking-wide py-1 border-b-2 border-transparent hover:border-[#C5A059]"
+              >
+                Contact Us
+              </a>
 
-          {/* Mobile Hamburger Button (Moved to right) */}
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-white hover:text-[#C5A059] focus:outline-none transition-colors cursor-pointer"
-            aria-label="Toggle Hamburger Menu"
-          >
-            {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
-          </button>
+              {/* Quick Chat WhatsApp Link */}
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#25D366]/20 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all text-xs font-semibold border border-[#25D366]/40"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Quick Chat</span>
+              </a>
+            </nav>
+
+            {/* Mobile Hamburger Button */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 text-white hover:text-[#C5A059] focus:outline-none transition-colors cursor-pointer"
+              aria-label="Toggle Hamburger Menu"
+            >
+              {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+            </button>
+          </div>
         </div>
       </div>
 
