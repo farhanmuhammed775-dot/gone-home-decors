@@ -116,16 +116,16 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
               <img
                 src="/assets/logo.png"
                 alt="G One Logo"
-                className="h-auto w-[140px] max-h-[55px] object-contain block transform group-hover:scale-105 transition-transform duration-300"
+                className="h-[48px] w-auto min-w-[120px] max-w-[160px] object-contain block transform group-hover:scale-105 transition-transform duration-300"
               />
             </div>
 
             {/* Typography: Stacked Two-Line Text (navbar-brand-text) */}
             <div className="flex flex-col justify-center leading-[1.15]">
-              <span className="font-['Cinzel'] text-[1rem] font-bold text-[#ffffff] tracking-[1px]">
+              <span className="font-['Cinzel'] text-[0.95rem] font-bold text-[#ffffff]">
                 G ONE
               </span>
-              <span className="font-['Cinzel'] text-[0.75rem] font-medium text-[#e5c158] tracking-[1.5px] uppercase">
+              <span className="font-['Cinzel'] text-[0.75rem] font-medium text-[#e5c158]">
                 HOME DÉCORS
               </span>
             </div>
