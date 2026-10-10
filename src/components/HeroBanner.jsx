@@ -33,9 +33,9 @@ export const HeroBanner = () => {
 
   return (
     <section className="relative w-full h-[100dvh] min-h-[100dvh] min-h-screen flex flex-col justify-center items-center overflow-hidden bg-[#121417]">
-      
-      {/* Autoplaying, Muted, Looped Background Video from Cloudinary */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden">
+
+      {/* Desktop Background: Autoplaying, Muted, Looped Video */}
+      <div className="hidden md:block absolute inset-0 w-full h-full overflow-hidden">
         <video
           ref={videoRef}
           autoPlay
@@ -46,13 +46,13 @@ export const HeroBanner = () => {
           className="w-full h-full object-cover scale-105 filter brightness-[0.70] contrast-[1.05]"
         >
           {/* Cloudinary high-definition interior design & luxury furniture video streams */}
-          <source 
-            src="https://res.cloudinary.com/demo/video/upload/q_auto,vc_h264/interior_design_luxury.mp4" 
-            type="video/mp4" 
+          <source
+            src="https://res.cloudinary.com/demo/video/upload/q_auto,vc_h264/interior_design_luxury.mp4"
+            type="video/mp4"
           />
-          <source 
-            src="https://assets.mixkit.co/videos/preview/mixkit-modern-living-room-with-a-comfortable-sofa-42583-large.mp4" 
-            type="video/mp4" 
+          <source
+            src="https://assets.mixkit.co/videos/preview/mixkit-modern-living-room-with-a-comfortable-sofa-42583-large.mp4"
+            type="video/mp4"
           />
         </video>
 
@@ -61,16 +61,26 @@ export const HeroBanner = () => {
         <div className="absolute inset-0 bg-[#C5A059]/10 mix-blend-overlay" />
       </div>
 
+      {/* Mobile Background: Static Colonial Staircase Image with Dark Overlay */}
+      <div
+        className="md:hidden absolute inset-0 w-full h-full"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)), url('/assets/mobile-hero-bg.jpg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center'
+        }}
+      />
+
       {/* Floating Video Controls */}
       <div className="absolute bottom-5 right-5 z-20 hidden sm:flex items-center gap-2 bg-black/40 backdrop-blur-md p-1.5 rounded-full border border-white/10 text-white/80 hover:text-white transition-all text-xs">
-        <button 
+        <button
           onClick={togglePlay}
           className="p-1.5 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
           title={isPlaying ? "Pause Video" : "Play Video"}
         >
           {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
         </button>
-        <button 
+        <button
           onClick={toggleMute}
           className="p-1.5 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
           title={isMuted ? "Unmute Video" : "Mute Video"}
@@ -81,7 +91,7 @@ export const HeroBanner = () => {
 
       {/* Hero Content Overlay: Perfectly vertically centered and padded for full mobile viewport */}
       <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 pt-20 sm:pt-24 pb-8 flex flex-col items-center justify-center text-center text-white my-auto">
-        
+
         {/* Brand Tagline Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-[#C5A059]/40 mb-4 sm:mb-5 shadow-lg">
           <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
