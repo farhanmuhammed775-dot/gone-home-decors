@@ -149,7 +149,14 @@ export function App() {
         ) : currentView === 'product' ? (
           <ProductPage
             products={products}
-            onBack={() => navigateTo('home')}
+            onBack={() => {
+              // Try to go back natively to restore DOM scroll states. If outside our custom scope, route to home.
+              if (window.history.state !== null) {
+                window.history.back();
+              } else {
+                navigateTo('home');
+              }
+            }}
           />
         ) : (
           <HomePage
