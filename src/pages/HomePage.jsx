@@ -4,6 +4,7 @@ import { CategoryNav } from '../components/CategoryNav';
 import { ProductCard } from '../components/ProductCard';
 import { AboutSection } from '../components/AboutSection';
 import { Search, SlidersHorizontal, Sparkles, AlertCircle, ArrowUpRight } from 'lucide-react';
+import { ADMIN_CATEGORIES } from '../data/categories';
 
 export const HomePage = ({ products, activeCategory, setActiveCategory, loading, error }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -21,6 +22,12 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
+    // Generate order map dynamically to match exactly what is defined in the main collections
+    const categoryOrder = ADMIN_CATEGORIES.reduce((acc, cat, idx) => {
+      acc[cat.toLowerCase()] = idx;
+      return acc;
+    }, {});
+
     return products
       .filter((item) => {
         const matchesCategory =
@@ -39,6 +46,14 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
         if (sortBy === 'price-low') return a.price - b.price;
         if (sortBy === 'price-high') return b.price - a.price;
         if (sortBy === 'rating') return (b.rating || 0) - (a.rating || 0);
+
+        // If "All" category is selected and default sort is used, preserve main collections exact order
+        if (activeCategory === 'All' && sortBy === 'featured') {
+          const orderA = categoryOrder[a.category?.toLowerCase()] ?? 999;
+          const orderB = categoryOrder[b.category?.toLowerCase()] ?? 999;
+          return orderA - orderB;
+        }
+
         return 0; // default featured order
       });
   }, [products, activeCategory, searchQuery, sortBy]);

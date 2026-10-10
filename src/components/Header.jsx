@@ -180,10 +180,10 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-white hover:text-[#C5A059] focus:outline-none transition-colors cursor-pointer ml-3 sm:ml-4"
+              className="md:hidden p-2 text-gray-300 hover:text-white focus:outline-none transition-colors cursor-pointer ml-3 sm:ml-4 drop-shadow-lg"
               aria-label="Toggle Hamburger Menu"
             >
-              {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
+              {mobileMenuOpen ? <X className="w-7 h-7 text-white" /> : <Menu className="w-7 h-7" />}
             </button>
           </div>
         </div>
@@ -191,12 +191,12 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
       {/* Responsive Hamburger Mobile Drawer */}
       <div
-        className={`md:hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-lg transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`md:hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-md transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
           }`}
         onClick={() => setMobileMenuOpen(false)}
       >
         <div
-          className={`w-[82%] max-w-sm h-full bg-[#171A1E] text-white p-6 shadow-2xl flex flex-col justify-between border-r border-[#C5A059]/30 transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          className={`w-[82%] max-w-sm h-full bg-[#121417] text-white p-6 shadow-2xl flex flex-col justify-between border-r border-[#C5A059]/30 transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
           onClick={(e) => e.stopPropagation()}
         >
@@ -218,35 +218,35 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
             </div>
 
             {/* Mobile Navigation List */}
-            <nav className="mt-6 flex flex-col gap-2">
+            <nav className="mt-6 flex flex-col gap-2 relative z-50">
               <button
                 type="button"
                 onClick={() => { if (currentView !== 'home') { window.history.pushState({}, '', '/'); window.dispatchEvent(new PopStateEvent('popstate')); } setMobileMenuOpen(false); }}
-                className="flex items-center justify-between w-full p-3 rounded-xl hover:bg-white/5 text-left text-gray-100 font-medium transition-colors cursor-pointer"
+                className="flex items-center justify-between w-full p-3 rounded-xl hover:bg-white/10 text-left text-gray-50 font-bold tracking-wide transition-colors cursor-pointer"
               >
-                <span className="flex items-center gap-3">
+                <span className="flex items-center gap-3 drop-shadow-md">
                   <svg className="w-5 h-5 text-[#C5A059]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                   <span>Home</span>
                 </span>
-                <span className="text-xs text-gray-400">Main Page</span>
+                <span className="text-xs text-gray-300">Main Page</span>
               </button>
 
               <button
                 type="button"
-                onClick={() => scrollToSection('products')}
-                className="flex items-center justify-between w-full p-3 rounded-xl hover:bg-white/5 text-left text-gray-100 font-medium transition-colors cursor-pointer"
+                onClick={() => { scrollToSection('products'); setMobileMenuOpen(false); }}
+                className="flex items-center justify-between w-full p-3 rounded-xl hover:bg-white/10 text-left text-gray-50 font-bold tracking-wide transition-colors cursor-pointer"
               >
-                <span className="flex items-center gap-3">
+                <span className="flex items-center gap-3 drop-shadow-md">
                   <ShoppingBag className="w-5 h-5 text-[#C5A059]" />
-                  <span>Shop</span>
+                  <span>Shop Collections</span>
                 </span>
-                <span className="text-xs text-gray-400">Browse All</span>
+                <span className="text-xs text-gray-300">Browse All</span>
               </button>
 
               <button
                 type="button"
-                onClick={() => scrollToSection('contact')}
-                className="flex items-center justify-between w-full p-3 rounded-xl hover:bg-white/5 text-left text-gray-100 font-medium transition-colors cursor-pointer"
+                onClick={() => { scrollToSection('contact'); setMobileMenuOpen(false); }}
+                className="flex items-center justify-between w-full p-3 rounded-xl hover:bg-white/10 text-left text-gray-50 font-bold tracking-wide transition-colors cursor-pointer"
               >
                 <span className="flex items-center gap-3">
                   <Phone className="w-5 h-5 text-[#C5A059]" />
