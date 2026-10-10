@@ -100,12 +100,12 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
 
       {/* Main Glassmorphic Navigation Bar */}
-      <div className={`transition-all duration-300 ${scrolled ? 'bg-[#121417]/95 shadow-xl py-2.5 border-b border-[#C5A059]/30' : 'bg-[#121417]/75 backdrop-blur-md py-3.5 border-b border-white/10'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between w-full">
+      <div className={`transition-all duration-300 ${scrolled ? 'bg-[#121417]/95 shadow-xl border-b border-[#C5A059]/30' : 'bg-[#121417]/75 backdrop-blur-md border-b border-white/10'}`}>
+        <div className="max-w-7xl mx-auto px-[15px] py-[10px] min-h-[75px] flex items-center justify-between w-full">
 
-          {/* Left/Center Content: Logo and Typography */}
-          <div className="flex items-center gap-3 sm:gap-4 lg:gap-5 flex-1 min-w-0">
-            {/* Logo: Left-to-Center spanning */}
+          {/* Left/Center Content: Logo and Typography (navbar-left-group) */}
+          <div className="flex items-center gap-[15px] flex-1">
+            {/* Logo: Left-to-Center spanning (navbar-logo) */}
             <div
               onClick={handleLogoClick}
               role="button"
@@ -116,16 +116,16 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
               <img
                 src="/assets/logo.png"
                 alt="G One Logo"
-                className="max-h-[44px] sm:max-h-[52px] w-auto object-contain transform group-hover:scale-105 transition-transform duration-300"
+                className="h-[50px] w-auto max-w-[160px] object-contain block transform group-hover:scale-105 transition-transform duration-300"
               />
             </div>
 
-            {/* Typography: Center-to-Right extending */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-baseline gap-0.5 sm:gap-2 truncate">
-              <span className="font-['Cinzel'] text-sm sm:text-base lg:text-lg font-bold tracking-widest text-white truncate">
+            {/* Typography: Stacked Two-Line Text (navbar-brand-text) */}
+            <div className="flex flex-col justify-center leading-[1.2]">
+              <span className="font-['Cinzel'] text-[0.95rem] font-bold text-[#ffffff] tracking-[1px]">
                 G ONE
               </span>
-              <span className="text-[#C5A059] font-['Cinzel'] text-[10px] sm:text-xs lg:text-sm font-semibold tracking-widest uppercase truncate">
+              <span className="font-['Cinzel'] text-[0.75rem] font-medium text-[#e5c158] tracking-[1.5px] uppercase">
                 HOME DÉCORS
               </span>
             </div>
