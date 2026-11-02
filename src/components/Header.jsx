@@ -191,13 +191,14 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
 
       {/* Responsive Hamburger Mobile Drawer */}
       <div
-        className={`md:hidden fixed inset-0 z-40 bg-black/80 backdrop-blur-md transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`md:hidden fixed inset-0 z-40 bg-black/60 transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
           }`}
         onClick={() => setMobileMenuOpen(false)}
       >
         <div
-          className={`w-[82%] max-w-sm h-full bg-[#0d0f12] text-white p-6 shadow-2xl flex flex-col justify-between border-r border-[#C5A059]/30 transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          className={`w-[82%] max-w-sm h-full bg-black text-white p-6 shadow-2xl flex flex-col justify-between border-r border-[#C5A059]/30 transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
+          style={{ backgroundColor: '#111213' }}
           onClick={(e) => e.stopPropagation()}
         >
           <div>
