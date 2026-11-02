@@ -196,7 +196,7 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
         onClick={() => setMobileMenuOpen(false)}
       >
         <div
-          className={`w-[82%] max-w-sm h-full bg-[#121417] text-white p-6 shadow-2xl flex flex-col justify-between border-r border-[#C5A059]/30 transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          className={`w-[82%] max-w-sm h-full bg-[#0d0f12] text-white p-6 shadow-2xl flex flex-col justify-between border-r border-[#C5A059]/30 transform transition-transform duration-300 ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
           onClick={(e) => e.stopPropagation()}
         >
