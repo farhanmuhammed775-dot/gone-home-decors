@@ -132,7 +132,7 @@ export function App() {
     }, 4500);
   };
 
-  const whatsappDirectUrl = `https://wa.me/+918606854763?text=${encodeURIComponent("Hello G One Home Décors! I'm reaching out to explore your luxury furniture collections and find the perfect addition to my home.")}`;
+  const whatsappDirectUrl = `https://wa.me/+919048437561?text=${encodeURIComponent("Hello G One Home Décors! I'm reaching out to explore your luxury furniture collections and find the perfect addition to my home.")}`;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-[#1F2421] selection:bg-[#C5A059]/20 selection:text-[#88652D]">

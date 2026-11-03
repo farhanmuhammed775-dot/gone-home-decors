@@ -44,7 +44,7 @@ export const ProductPage = ({ products, onBack }) => {
 
     const handleWhatsAppOrder = () => {
         const message = `Hi, I would like to confirm an order for ${product.title} priced at ${formattedPrice}`;
-        const url = `https://wa.me/+918606854763?text=${encodeURIComponent(message)}`;
+        const url = `https://wa.me/+919048437561?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank', 'noopener,noreferrer');
     };
 

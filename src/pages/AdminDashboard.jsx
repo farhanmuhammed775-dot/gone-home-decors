@@ -578,7 +578,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                           <div className="flex items-center justify-end gap-2">
                             {/* WhatsApp Direct preview */}
                             <a
-                              href={`https://wa.me/+918606854763?text=Hi%2C%20I%20would%20like%20to%20confirm%20an%20order%20for%20${encodeURIComponent(prod.title)}%20priced%20at%20${encodeURIComponent(formatINR(prod.price))}`}
+                              href={`https://wa.me/+919048437561?text=Hi%2C%20I%20would%20like%20to%20confirm%20an%20order%20for%20${encodeURIComponent(prod.title)}%20priced%20at%20${encodeURIComponent(formatINR(prod.price))}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors"

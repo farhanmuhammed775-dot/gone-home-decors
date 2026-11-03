@@ -1,4 +1,4 @@
-﻿import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Sparkles, MessageCircle, ArrowRight, Play, Pause, Volume2, VolumeX, ChevronDown } from 'lucide-react';
 
 export const HeroBanner = () => {
@@ -6,7 +6,7 @@ export const HeroBanner = () => {
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef(null);
 
-  const whatsappUrl = "https://wa.me/+918606854763?text=Hi%2C%20I%20would%20like%20to%20explore%20luxury%20custom%20furniture%20from%20G%20One%20Home%20D%C3%A9cors.";
+  const whatsappUrl = "https://wa.me/+919048437561?text=Hi%2C%20I%20would%20like%20to%20explore%20luxury%20custom%20furniture%20from%20G%20One%20Home%20D%C3%A9cors.";
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -96,7 +96,7 @@ export const HeroBanner = () => {
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-[#C5A059]/40 mb-4 sm:mb-5 shadow-lg">
           <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
           <span className="text-[11px] sm:text-xs font-semibold tracking-widest text-[#E8D3A2] uppercase font-['Cinzel']">
-            G One Home Décors · Manjeri, Kerala
+            G One Home D�cors � Manjeri, Kerala
           </span>
         </div>
 

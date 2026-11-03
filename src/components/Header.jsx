@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Menu,
   X,
@@ -57,7 +57,7 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const whatsappUrl = "https://wa.me/+918606854763";
+  const whatsappUrl = "https://wa.me/+919048437561";
   const instagramUrl = "https://www.instagram.com/gonehomedecors?stkn=MWt3NnF4b2hhbm5scw==";
 
   const scrollToSection = (id) => {
@@ -111,7 +111,7 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
                 onClick={handleLogoClick}
                 role="button"
                 tabIndex={0}
-                title="G One Home Décors"
+                title="G One Home D�cors"
                 className="group cursor-pointer shrink-0"
               >
                 <img
@@ -127,7 +127,7 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
                   G ONE
                 </span>
                 <span className="font-['Cinzel'] text-[0.75rem] font-medium text-[#e5c158]">
-                  HOME DÉCORS
+                  HOME D�CORS
                 </span>
               </div>
             </div>
@@ -300,7 +300,7 @@ export const Header = ({ onOpenAdminLogin, onCategorySelect, currentView }) => {
           {/* Drawer Footer */}
           <div className="pt-6 border-t border-white/10">
             <p className="text-center text-[10px] text-gray-500">
-              G One Home Décors © 2026. Manjeri, Kerala.
+              G One Home D�cors � 2026. Manjeri, Kerala.
             </p>
           </div>
         </div>
