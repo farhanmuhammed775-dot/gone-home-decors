@@ -1,12 +1,12 @@
 ﻿import React from 'react';
-import { 
-  MapPin, 
-  Phone, 
-  MessageCircle, 
-  Mail, 
-  Clock, 
-  ArrowUp, 
-  Heart, 
+import {
+  MapPin,
+  Phone,
+  MessageCircle,
+  Mail,
+  Clock,
+  ArrowUp,
+  Heart,
   ShieldCheck,
   ChevronRight
 } from 'lucide-react';
@@ -14,7 +14,7 @@ import { InstagramIcon } from './InstagramIcon';
 import { CATEGORIES } from '../data/categories';
 
 export const Footer = ({ onSelectCategory }) => {
-  const whatsappUrl = "https://wa.me/+918606854763";
+  const whatsappUrl = "https://wa.me/+919744706612";
   const instagramUrl = "https://www.instagram.com/gonehomedecors?stkn=MWt3NnF4b2hhbm5scw==";
 
   const scrollToTop = () => {
@@ -23,22 +23,22 @@ export const Footer = ({ onSelectCategory }) => {
 
   return (
     <footer id="contact" className="bg-[#121417] text-white pt-16 pb-8 border-t border-[#C5A059]/30 relative">
-      
+
       {/* Top Gold Gradient Accent Line */}
       <div className="absolute top-0 left-0 right-0 h-1 gold-gradient-bg" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        
+
         {/* Main Grid: 4 columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-gray-800">
-          
+
           {/* Brand & Slogan Column (4 columns) */}
           <div className="lg:col-span-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="p-1 rounded-full bg-white/10 border border-[#C5A059]">
-                <img 
-                  src="/assets/logo.png" 
-                  alt="G One Home Décors Logo" 
+                <img
+                  src="/assets/logo.png"
+                  alt="G One Home Décors Logo"
                   className="w-12 h-12 object-contain rounded-full"
                 />
               </div>
@@ -119,7 +119,7 @@ export const Footer = ({ onSelectCategory }) => {
             </h3>
 
             <div className="space-y-4 text-xs text-gray-300">
-              
+
               {/* Business Address */}
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-[#C5A059] shrink-0 mt-0.5" />
@@ -130,7 +130,7 @@ export const Footer = ({ onSelectCategory }) => {
                   <p className="text-gray-400 leading-relaxed">
                     Manjeri, Malappuram, Kerala - 676122
                   </p>
-                  <a 
+                  <a
                     href="https://maps.google.com/?q=Manjeri,Malappuram,Kerala"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -149,14 +149,14 @@ export const Footer = ({ onSelectCategory }) => {
                     Customer & Order Hotline:
                   </strong>
                   <div className="flex flex-wrap items-center gap-3">
-                    <a 
-                      href="tel:+918606854763"
+                    <a
+                      href="tel:+919744706612"
                       className="text-gray-300 hover:text-[#C5A059] font-mono text-sm font-semibold transition-colors"
                     >
-                      +91 8606854763
+                      +91 9744706612
                     </a>
                     <span className="text-gray-600">/</span>
-                    <a 
+                    <a
                       href="tel:+919526785319"
                       className="text-gray-300 hover:text-[#C5A059] font-mono text-sm font-semibold transition-colors"
                     >
