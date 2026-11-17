@@ -62,6 +62,13 @@
     image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=600&auto=format&fit=crop',
     description: 'Crystal chandeliers, Scandinavian floor lamps & ambient brass wall sconces' 
   },
+  { 
+    id: 'curtains', 
+    name: 'Curtains', 
+    icon: 'Wind', 
+    image: '/assets/curtains.avif',
+    description: 'Luxury blackout curtains, sheer drapes, velvet & linen window treatments' 
+  },
 ];
 
 export const ADMIN_CATEGORIES = [
@@ -72,5 +79,6 @@ export const ADMIN_CATEGORIES = [
   'Decor',
   'Mattress',
   'Outdoor',
-  'Lamps & Lighting'
+  'Lamps & Lighting',
+  'Curtains'
 ];

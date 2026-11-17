@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { 
   Sparkles, 
   Footprints, 
@@ -9,6 +9,7 @@ import {
   Layers, 
   SunMedium, 
   Lamp,
+  Wind,
   ChevronRight,
   Check
 } from 'lucide-react';
@@ -23,16 +24,20 @@ const iconMap = {
   Palette: Palette,
   Layers: Layers,
   SunMedium: SunMedium,
-  Lamp: Lamp
+  Lamp: Lamp,
+  Wind: Wind
 };
 
 export const CategoryNav = ({ activeCategory, onSelectCategory, productCounts }) => {
   const handleCategoryClick = (categoryName) => {
     onSelectCategory(categoryName);
-    const productsSection = document.getElementById('products');
-    if (productsSection) {
-      productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    // Use rAF to defer scroll until after React re-render, preventing scroll-jank
+    requestAnimationFrame(() => {
+      const productsSection = document.getElementById('products');
+      if (productsSection) {
+        productsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   };
 
   return (
@@ -53,8 +58,8 @@ export const CategoryNav = ({ activeCategory, onSelectCategory, productCounts })
           </p>
         </div>
 
-        {/* 9 Categories in 3 Rows (3 Columns x 3 Rows = 9 Cards) */}
-        <div className="grid grid-cols-3 gap-2.5 sm:gap-4 md:gap-5">
+        {/* 10 Categories: 2 cols on mobile, 5 cols on tablet/desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 sm:gap-4 md:gap-4" style={{ touchAction: 'pan-y' }}>
           {CATEGORIES.map((cat, index) => {
             const IconComponent = iconMap[cat.icon] || Sparkles;
             const isSelected = 
@@ -67,32 +72,41 @@ export const CategoryNav = ({ activeCategory, onSelectCategory, productCounts })
                 key={cat.id}
                 type="button"
                 onClick={() => handleCategoryClick(cat.name)}
-                className={`group relative overflow-hidden rounded-xl sm:rounded-2xl transition-all duration-300 text-left border cursor-pointer flex flex-col justify-between aspect-[1/1] sm:aspect-[4/3] md:aspect-[16/10] p-2.5 sm:p-4 ${
+                className={`group relative overflow-hidden rounded-xl sm:rounded-2xl text-left border cursor-pointer flex flex-col justify-between aspect-[1/1] sm:aspect-[4/3] md:aspect-[16/10] p-2.5 sm:p-4 ${
                   isSelected
-                    ? 'border-[#C5A059] ring-2 ring-[#C5A059] shadow-lg shadow-[#C5A059]/20 scale-[1.02]'
-                    : 'border-gray-200 hover:border-[#C5A059]/60 hover:shadow-md hover:scale-[1.01]'
+                    ? 'border-[#C5A059] ring-2 ring-[#C5A059] shadow-lg shadow-[#C5A059]/20'
+                    : 'border-gray-200'
                 }`}
+                style={{ contain: 'layout paint' }}
               >
-                {/* Background Image with Dark Vignette */}
+                {/* Background Image — NO css filter (too expensive on mobile GPUs).
+                    Darkness is achieved by a plain div overlay instead. */}
                 <div className="absolute inset-0 z-0">
                   <img
                     src={cat.image}
                     alt={cat.name}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 filter brightness-[0.70] group-hover:brightness-[0.60]"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                    style={{ transform: 'translateZ(0)' }}
                   />
-                  <div className={`absolute inset-0 transition-colors ${
-                    isSelected 
-                      ? 'bg-gradient-to-t from-black/85 via-black/40 to-[#C5A059]/25' 
-                      : 'bg-gradient-to-t from-black/80 via-black/35 to-transparent group-hover:from-black/85'
+                  {/* Static dark base — no transition, no filter, no repaint */}
+                  <div className="absolute inset-0 bg-black/55" />
+                  {/* Gradient vignette — static, no transition */}
+                  <div className={`absolute inset-0 ${
+                    isSelected
+                      ? 'bg-gradient-to-t from-black/70 via-transparent to-[#C5A059]/20'
+                      : 'bg-gradient-to-t from-black/65 via-transparent to-transparent'
                   }`} />
                 </div>
 
                 {/* Top Badge: Active / Count */}
                 <div className="relative z-10 flex items-center justify-between w-full">
-                  <span className={`p-1 sm:p-1.5 rounded-lg backdrop-blur-md transition-colors ${
+                  {/* Replace backdrop-blur with solid bg — blur is GPU-killer on mobile */}
+                  <span className={`p-1 sm:p-1.5 rounded-lg transition-colors ${
                     isSelected
                       ? 'bg-[#C5A059] text-[#121417]'
-                      : 'bg-black/40 text-[#E8D3A2] border border-white/10 group-hover:bg-[#C5A059] group-hover:text-[#121417]'
+                      : 'bg-black/60 text-[#E8D3A2] border border-white/10 group-hover:bg-[#C5A059] group-hover:text-[#121417]'
                   }`}>
                     <IconComponent className="w-3 h-3 sm:w-4 sm:h-4" />
                   </span>
@@ -103,7 +117,7 @@ export const CategoryNav = ({ activeCategory, onSelectCategory, productCounts })
                       <span>Active</span>
                     </span>
                   ) : count > 0 ? (
-                    <span className="px-1.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-mono font-medium bg-black/50 text-gray-200 backdrop-blur-md border border-white/10">
+                    <span className="px-1.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-mono font-medium bg-black/60 text-gray-200 border border-white/10">
                       {count}
                     </span>
                   ) : null}

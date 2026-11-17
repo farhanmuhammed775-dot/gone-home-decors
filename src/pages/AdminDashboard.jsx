@@ -38,9 +38,11 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
 
   // Upload & submission states
   const [uploading, setUploading] = useState(false);
+  const [widgetLoading, setWidgetLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [showConfigModal, setShowConfigModal] = useState(false);
+  const fileInputRef = React.useRef(null);
 
   // Settings State
   const [firebaseConfig, setFirebaseConfig] = useState(getStoredFirebaseConfig());
@@ -49,12 +51,15 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
 
   // Handle Cloudinary Official Widget
   const handleOpenCloudinaryWidget = () => {
+    setWidgetLoading(true);
     openCloudinaryWidget(
       (secureUrl) => {
+        setWidgetLoading(false);
         setImageUrl(secureUrl);
         onNotify('Media uploaded successfully to Cloudinary!', 'success');
       },
       (error) => {
+        setWidgetLoading(false);
         onNotify(error.message || 'Cloudinary widget upload failed', 'error');
       }
     );
@@ -64,6 +69,9 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
   const handleDirectFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    // Reset input so same file can be re-uploaded if needed
+    if (fileInputRef.current) fileInputRef.current.value = '';
 
     setUploading(true);
     setUploadProgress(0);
@@ -79,7 +87,12 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
       // Create local object URL as fallback preview if cloud upload preset is pending
       const localPreview = URL.createObjectURL(file);
       setImageUrl(localPreview);
-      onNotify('Preview loaded locally. Configure Cloudinary credentials in Settings for cloud sync.', 'info');
+      onNotify(
+        err.message?.includes('preset')
+          ? 'Upload failed: Your Cloudinary preset may be Signed. Go to API Settings and set an Unsigned preset.'
+          : 'Preview loaded locally. Configure Cloudinary credentials in Settings for cloud sync.',
+        'info'
+      );
     } finally {
       setUploading(false);
     }
@@ -364,20 +377,32 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                     <button
                       type="button"
                       onClick={handleOpenCloudinaryWidget}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#121417] hover:bg-gray-800 text-[#E8D3A2] text-xs font-semibold shadow-xs transition-colors cursor-pointer"
+                      disabled={widgetLoading || uploading}
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#121417] hover:bg-gray-800 text-[#E8D3A2] text-xs font-semibold shadow-xs transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                      <Cloud className="w-4 h-4 text-[#C5A059]" />
-                      <span>Cloudinary Widget</span>
+                      {widgetLoading ? (
+                        <>
+                          <RefreshCw className="w-4 h-4 animate-spin text-[#C5A059]" />
+                          <span>Loading Widget...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Cloud className="w-4 h-4 text-[#C5A059]" />
+                          <span>Cloudinary Widget</span>
+                        </>
+                      )}
                     </button>
 
                     {/* Direct File Picker */}
-                    <label className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-gray-300 hover:border-[#C5A059] bg-white text-gray-700 text-xs font-semibold cursor-pointer transition-colors text-center">
+                    <label className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-gray-300 hover:border-[#C5A059] bg-white text-gray-700 text-xs font-semibold transition-colors text-center ${uploading || widgetLoading ? 'opacity-60 cursor-not-allowed pointer-events-none' : 'cursor-pointer'}`}>
                       <Upload className="w-4 h-4 text-[#C5A059]" />
-                      <span>Upload File</span>
+                      <span>{uploading ? `Uploading ${uploadProgress}%...` : 'Upload File'}</span>
                       <input
+                        ref={fileInputRef}
                         type="file"
                         accept="image/*,video/*"
                         onChange={handleDirectFileUpload}
+                        disabled={uploading || widgetLoading}
                         className="hidden"
                       />
                     </label>

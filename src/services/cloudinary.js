@@ -9,6 +9,7 @@ export const getCloudinaryConfig = () => {
   }
   return {
     cloudName: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'y702lxik',
+    // 'ml_default' is a SIGNED preset — replace with your unsigned preset name in API Settings
     uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'ml_default',
     apiKey: import.meta.env.VITE_CLOUDINARY_API_KEY || ''
   };
@@ -19,13 +20,42 @@ export const saveCloudinaryConfig = (config) => {
 };
 
 /**
+ * Wait for the Cloudinary widget script to finish loading (up to 8 seconds).
+ * Returns true if loaded, false if timed out.
+ */
+const waitForCloudinaryWidget = (timeoutMs = 8000) =>
+  new Promise((resolve) => {
+    if (typeof window.cloudinary !== 'undefined') {
+      resolve(true);
+      return;
+    }
+    const start = Date.now();
+    const check = () => {
+      if (typeof window.cloudinary !== 'undefined') {
+        resolve(true);
+      } else if (Date.now() - start >= timeoutMs) {
+        resolve(false);
+      } else {
+        setTimeout(check, 150);
+      }
+    };
+    check();
+  });
+
+/**
  * Open Cloudinary Official Upload Widget
  */
-export const openCloudinaryWidget = (onSuccess, onError) => {
+export const openCloudinaryWidget = async (onSuccess, onError) => {
   const config = getCloudinaryConfig();
 
-  if (typeof window.cloudinary === 'undefined') {
-    onError(new Error('Cloudinary widget script is still loading. Please check internet connection or upload directly.'));
+  // Wait for the deferred script to be ready before giving up
+  const ready = await waitForCloudinaryWidget(8000);
+  if (!ready) {
+    onError(
+      new Error(
+        'Cloudinary widget failed to load. Check your internet connection or use the "Upload File" button instead.'
+      )
+    );
     return;
   }
 
@@ -61,7 +91,18 @@ export const openCloudinaryWidget = (onSuccess, onError) => {
       (error, result) => {
         if (error) {
           console.error('Cloudinary widget error:', error);
-          if (onError) onError(error);
+          // Translate common widget errors into plain English
+          if (error.status === 'upload_error') {
+            if (onError)
+              onError(
+                new Error(
+                  'Upload failed — your Cloudinary upload preset may be set to "Signed". ' +
+                  'Go to API Settings → set an Unsigned preset and try again.'
+                )
+              );
+          } else {
+            if (onError) onError(new Error(error.statusText || error.message || 'Widget upload failed.'));
+          }
           return;
         }
         if (result && result.event === 'success') {
