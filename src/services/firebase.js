@@ -16,6 +16,22 @@ import { DEFAULT_PRODUCTS } from '../data/defaultProducts';
 const STORAGE_KEY_CONFIG = 'gone_firebase_config';
 const STORAGE_KEY_PRODUCTS = 'gone_local_products';
 
+// ─── Cache Version ───────────────────────────────────────────────────────────
+// Bump this string whenever you deploy a major update.
+// Any phone whose cached version doesn't match will have its localStorage
+// cleared and re-synced fresh from Firestore — fixing "stuck on old data" issues.
+const CACHE_VERSION = 'v3';
+const STORAGE_KEY_CACHE_VERSION = 'gone_cache_version';
+
+const bustStaleCache = () => {
+  const stored = localStorage.getItem(STORAGE_KEY_CACHE_VERSION);
+  if (stored !== CACHE_VERSION) {
+    localStorage.removeItem(STORAGE_KEY_PRODUCTS);
+    localStorage.setItem(STORAGE_KEY_CACHE_VERSION, CACHE_VERSION);
+    console.info('[Gone] Cache version updated — stale products cleared, re-syncing from Firestore.');
+  }
+};
+
 // Default Live Firebase Configuration
 export const getStoredFirebaseConfig = () => {
   return {
@@ -50,7 +66,8 @@ export const initFirebase = () => {
   }
 };
 
-// Initialize on module load
+// Initialize on module load + bust stale cache
+bustStaleCache();
 initFirebase();
 
 // Local Storage Fallback Store (Instant Load Cache)
@@ -59,6 +76,7 @@ export const getLocalProducts = () => {
     const saved = localStorage.getItem(STORAGE_KEY_PRODUCTS);
     if (saved) {
       const parsed = JSON.parse(saved);
+      // Only use cache if it has real Firestore products (not default/demo data)
       if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed;
       }
@@ -66,7 +84,8 @@ export const getLocalProducts = () => {
   } catch (e) {
     console.warn('Error reading local products', e);
   }
-  return DEFAULT_PRODUCTS;
+  // Return empty array instead of DEFAULT_PRODUCTS so Firestore always wins
+  return [];
 };
 
 export const saveLocalProducts = (products) => {
@@ -78,20 +97,24 @@ export const saveLocalProducts = (products) => {
 };
 
 /**
- * Real-time listener for products from Firebase Firestore
- * Uses Stale-While-Revalidate pattern: Immediately serves cached products (0ms),
- * then updates seamlessly as soon as Firestore cloud data arrives.
+ * Real-time listener for products from Firebase Firestore.
+ * Strategy:
+ *  1. Show cached products instantly (if any real products are cached)
+ *  2. Always replace with live Firestore data as soon as it arrives
+ *  3. If Firestore is unreachable after 8s, fall back to cache or DEFAULT_PRODUCTS
  */
 export const subscribeToProducts = (onUpdate, onError) => {
-  // 1. Instantly deliver cached/default products so user never waits (0 ms latency)
+  // Show cached products immediately (only if they're real Firestore products)
   const initialLocal = getLocalProducts();
-  if (initialLocal && initialLocal.length > 0) {
+  if (initialLocal.length > 0) {
     onUpdate(initialLocal);
   }
 
   const db = initFirebase();
 
   if (!db) {
+    // No Firebase — show defaults
+    onUpdate(initialLocal.length > 0 ? initialLocal : DEFAULT_PRODUCTS);
     const handleStorage = () => onUpdate(getLocalProducts());
     window.addEventListener('storage', handleStorage);
     return () => window.removeEventListener('storage', handleStorage);
@@ -99,47 +122,49 @@ export const subscribeToProducts = (onUpdate, onError) => {
 
   let cloudDataReceived = false;
 
-  // 2. Safety timeout: If Firestore network or cold-start takes > 2.5s, keep UI alive with cache
+  // Extended timeout to 8s for slow mobile data connections
   const timeoutId = setTimeout(() => {
     if (!cloudDataReceived) {
-      console.warn('Firestore initial response pending, keeping cached catalog visible.');
-      onUpdate(getLocalProducts());
+      console.warn('[Gone] Firestore timeout — showing cached/default catalog.');
+      const fallback = getLocalProducts();
+      onUpdate(fallback.length > 0 ? fallback : DEFAULT_PRODUCTS);
     }
-  }, 2500);
+  }, 8000);
 
   try {
     const productsRef = collection(db, 'products');
-    // Query directly without server-side orderBy to avoid missing documents lacking createdAt or index requirements
+
     const unsubscribe = onSnapshot(productsRef, (snapshot) => {
       cloudDataReceived = true;
       clearTimeout(timeoutId);
 
       if (snapshot.empty) {
-        // If Firestore collection has no documents yet, keep/seed default catalog
-        const local = getLocalProducts();
-        onUpdate(local);
+        // Firestore is empty — show DEFAULT_PRODUCTS as placeholder catalog
+        // but do NOT cache them (keeps the door open for real uploads to appear)
+        console.info('[Gone] Firestore collection is empty — showing default catalog.');
+        onUpdate(DEFAULT_PRODUCTS);
       } else {
-        const firestoreProducts = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || doc.data().createdAt || new Date().toISOString()
+        const firestoreProducts = snapshot.docs.map(d => ({
+          id: d.id,
+          ...d.data(),
+          createdAt: d.data().createdAt?.toDate?.()?.toISOString() || d.data().createdAt || new Date().toISOString()
         }));
 
-        // Sort client-side by createdAt (newest first)
-        firestoreProducts.sort((a, b) => {
-          const timeA = new Date(a.createdAt || 0).getTime();
-          const timeB = new Date(b.createdAt || 0).getTime();
-          return timeB - timeA;
-        });
+        // Sort client-side newest first
+        firestoreProducts.sort((a, b) =>
+          new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+        );
 
-        // Cache latest cloud products locally for 0ms load on next visit
+        // Cache for instant load on next visit
         saveLocalProducts(firestoreProducts);
+        // Always push live Firestore data — overrides any stale cache
         onUpdate(firestoreProducts);
       }
     }, (error) => {
       clearTimeout(timeoutId);
-      console.warn('Firestore subscription notice, falling back to cached catalog:', error.message);
-      onUpdate(getLocalProducts());
+      console.warn('[Gone] Firestore error, falling back to cache:', error.message);
+      const fallback = getLocalProducts();
+      onUpdate(fallback.length > 0 ? fallback : DEFAULT_PRODUCTS);
       if (onError) onError(error);
     });
 
@@ -149,8 +174,9 @@ export const subscribeToProducts = (onUpdate, onError) => {
     };
   } catch (error) {
     clearTimeout(timeoutId);
-    console.error('Error setting up Firestore listener:', error);
-    onUpdate(getLocalProducts());
+    console.error('[Gone] Error setting up Firestore listener:', error);
+    const fallback = getLocalProducts();
+    onUpdate(fallback.length > 0 ? fallback : DEFAULT_PRODUCTS);
     if (onError) onError(error);
     return () => { };
   }
