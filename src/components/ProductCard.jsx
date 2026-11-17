@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { MessageCircle, Eye, Star, Sparkles, CheckCircle2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -24,7 +24,7 @@ export const ProductCard = ({ product, onQuickView }) => {
     : null;
 
   // Exact WhatsApp confirmation URL specification:
-  // https://wa.me/+918606854763?text=Hi%2C%20I%20would%20like%20to%20confirm%20an%20order%20for%20[Product_Title]%20priced%20at%20[Product_Price]
+  // https://wa.me/+919048437561?text=Hi%2C%20I%20would%20like%20to%20confirm%20an%20order%20for%20[Product_Title]%20priced%20at%20[Product_Price]
   const handleWhatsAppOrder = (e) => {
     e.stopPropagation();
 
@@ -41,7 +41,7 @@ export const ProductCard = ({ product, onQuickView }) => {
     }
 
     const message = `Hi, I would like to confirm an order for ${product.title} priced at ${formattedPrice}`;
-    const url = `https://wa.me/+918606854763?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/+919048437561?text=${encodeURIComponent(message)}`;
     
     // Open in new window
     window.open(url, '_blank', 'noopener,noreferrer');

@@ -1,9 +1,9 @@
-﻿import React from 'react';
+import React from 'react';
 import { Sparkles, MapPin, Phone, MessageCircle, ArrowRight } from 'lucide-react';
 import { InstagramIcon } from './InstagramIcon';
 
 export const AboutSection = () => {
-  const whatsappUrl = "https://wa.me/+918606854763?text=Hi%2C%20I%20would%20like%20to%20visit%20G%20One%20Home%20D%C3%A9cors%20showroom%20in%20Manjeri.";
+  const whatsappUrl = "https://wa.me/+919048437561?text=Hi%2C%20I%20would%20like%20to%20visit%20G%20One%20Home%20D%C3%A9cors%20showroom%20in%20Manjeri.";
 
   return (
     <section id="about" className="py-20 bg-white relative overflow-hidden">
@@ -28,7 +28,7 @@ export const AboutSection = () => {
                   className="w-14 h-14 object-contain rounded-full border border-[#C5A059]"
                 />
                 <div>
-                  <h4 className="font-['Cinzel'] font-bold text-gray-900 text-sm">G ONE HOME DÉCORS</h4>
+                  <h4 className="font-['Cinzel'] font-bold text-gray-900 text-sm">G ONE HOME D�CORS</h4>
                   <p className="text-[11px] text-[#9A7B2C] font-semibold tracking-wide uppercase">Leads to dreamy world</p>
                   <p className="text-[11px] text-gray-500 flex items-center gap-1 mt-0.5">
                     <MapPin className="w-3 h-3 text-[#C5A059]" /> Manjeri, Malappuram
@@ -50,11 +50,11 @@ export const AboutSection = () => {
             </div>
 
             <h2 className="text-3xl sm:text-4xl font-['Cinzel'] font-bold text-gray-900 leading-tight mb-4">
-              Where Kerala’s Finest Timber Meets Modern Luxury Living
+              Where Kerala�s Finest Timber Meets Modern Luxury Living
             </h2>
 
             <p className="text-base text-gray-600 leading-relaxed mb-6">
-              Welcome to <strong className="text-gray-900">G One Home Décors</strong>. Located in the heart of Manjeri, Malappuram, we specialize in curating living spaces that inspire and soothe. With a motto that <span className="text-[#88652D] font-semibold italic">"Leads to Dreamy World"</span>, our team transforms spaces using seasoned Nilambur teak, royal rosewood, and contemporary Italian marble.
+              Welcome to <strong className="text-gray-900">G One Home D�cors</strong>. Located in the heart of Manjeri, Malappuram, we specialize in curating living spaces that inspire and soothe. With a motto that <span className="text-[#88652D] font-semibold italic">"Leads to Dreamy World"</span>, our team transforms spaces using seasoned Nilambur teak, royal rosewood, and con9048437561orary Italian marble.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
@@ -81,7 +81,7 @@ export const AboutSection = () => {
               </a>
 
               <a
-                href="tel:+918606854763"
+                href="tel:+919048437561"
                 className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold text-sm transition-all"
               >
                 <Phone className="w-4 h-4 text-[#88652D]" />

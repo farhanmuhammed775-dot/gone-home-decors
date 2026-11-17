@@ -2,14 +2,13 @@
 import { HeroBanner } from '../components/HeroBanner';
 import { CategoryNav } from '../components/CategoryNav';
 import { ProductCard } from '../components/ProductCard';
-import { ProductDetailModal } from '../components/ProductDetailModal';
 import { AboutSection } from '../components/AboutSection';
 import { Search, SlidersHorizontal, Sparkles, AlertCircle, ArrowUpRight } from 'lucide-react';
+import { ADMIN_CATEGORIES } from '../data/categories';
 
 export const HomePage = ({ products, activeCategory, setActiveCategory, loading, error }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('featured');
-  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Calculate category product counts
   const productCounts = useMemo(() => {
@@ -23,6 +22,12 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
+    // Generate order map dynamically to match exactly what is defined in the main collections
+    const categoryOrder = ADMIN_CATEGORIES.reduce((acc, cat, idx) => {
+      acc[cat.toLowerCase()] = idx;
+      return acc;
+    }, {});
+
     return products
       .filter((item) => {
         const matchesCategory =
@@ -41,6 +46,14 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
         if (sortBy === 'price-low') return a.price - b.price;
         if (sortBy === 'price-high') return b.price - a.price;
         if (sortBy === 'rating') return (b.rating || 0) - (a.rating || 0);
+
+        // If "All" category is selected and default sort is used, preserve main collections exact order
+        if (activeCategory === 'All' && sortBy === 'featured') {
+          const orderA = categoryOrder[a.category?.toLowerCase()] ?? 999;
+          const orderB = categoryOrder[b.category?.toLowerCase()] ?? 999;
+          return orderA - orderB;
+        }
+
         return 0; // default featured order
       });
   }, [products, activeCategory, searchQuery, sortBy]);
@@ -59,7 +72,7 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
 
       {/* 3. Products Section */}
       <section id="products" className="py-10 sm:py-14 max-w-7xl mx-auto px-4 sm:px-6">
-        
+
         {/* Controls Bar: Active Category Heading, Search & Sort */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200/80 shadow-xs">
           <div>
@@ -132,7 +145,11 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
                   <ProductCard
                     key={product.id}
                     product={product}
-                    onQuickView={(p) => setSelectedProduct(p)}
+                    onQuickView={(p) => {
+                      sessionStorage.setItem('gone_scroll_pos', window.scrollY.toString());
+                      window.history.pushState({ page: 'home' }, '', `/product/${p.id}`);
+                      window.dispatchEvent(new PopStateEvent('popstate'));
+                    }}
                   />
                 ))}
               </div>
@@ -164,14 +181,6 @@ export const HomePage = ({ products, activeCategory, setActiveCategory, loading,
 
       {/* 4. About G One Home Décors Story */}
       <AboutSection />
-
-      {/* Quick View Modal */}
-      {selectedProduct && (
-        <ProductDetailModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-        />
-      )}
     </main>
   );
 };

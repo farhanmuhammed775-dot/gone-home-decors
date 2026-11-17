@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
+import { ProductPage } from './pages/ProductPage';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminLoginModal } from './components/AdminLoginModal';
 import { subscribeToProducts, getLocalProducts } from './services/firebase';
 import { MessageCircle } from 'lucide-react';
+import { Toast } from './components/Toast';
 
 export function App() {
-  const [currentView, setCurrentView] = useState('home'); // 'home' | 'admin'
+  const [currentView, setCurrentView] = useState('home'); // 'home' | 'admin' | 'product'
   const [products, setProducts] = useState(() => getLocalProducts());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -27,6 +29,7 @@ export function App() {
       const path = window.location.pathname;
       const hash = window.location.hash;
       const isTryingAdmin = path === '/admin' || hash === '#admin';
+      const isTryingProduct = path.startsWith('/product/');
 
       if (isTryingAdmin) {
         const isAuth = sessionStorage.getItem('gone_admin_auth') === 'true';
@@ -36,8 +39,22 @@ export function App() {
           setCurrentView('home');
           setShowAdminLoginModal(true);
         }
+      } else if (isTryingProduct) {
+        setCurrentView('product');
+        window.scrollTo({ top: 0, behavior: 'instant' });
       } else {
         setCurrentView('home');
+        // Manually restore scroll state specifically for mobile layouts changing dynamically
+        setTimeout(() => {
+          const savedScroll = sessionStorage.getItem('gone_scroll_pos');
+          if (savedScroll) {
+            window.scrollTo({ top: parseInt(savedScroll, 10), behavior: 'instant' });
+            sessionStorage.removeItem('gone_scroll_pos');
+          } else if (window.location.hash !== '#products' && window.location.hash !== '#about' && window.location.hash !== '#contact') {
+            // Only force top if there's no specific hash target and no saved scroll
+            // window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }, 50); // slight delay to allow DOM to paint the Product Cards
       }
     };
 
@@ -115,19 +132,21 @@ export function App() {
     }, 4500);
   };
 
-  const whatsappDirectUrl = "https://wa.me/+918606854763?text=Hi%2C%20I%20have%20an%20inquiry%20about%20G%20One%20Home%20D%C3%A9cors.";
+  const whatsappDirectUrl = `https://wa.me/+919048437561?text=${encodeURIComponent("Hello G One Home Décors! I'm reaching out to explore your luxury furniture collections and find the perfect addition to my home.")}`;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFBF7] text-[#1F2421] selection:bg-[#C5A059]/20 selection:text-[#88652D]">
-      {/* Global Navigation Header (Admin trigger hidden in logo - 3 clicks) */}
-      <Header
-        currentView={currentView}
-        onOpenAdminLogin={handleOpenAdminLogin}
-        onCategorySelect={(cat) => {
-          setActiveCategory(cat);
-          if (currentView !== 'home') navigateTo('home');
-        }}
-      />
+      {/* Global Navigation Header (Hidden on Product Page for immersive view) */}
+      {currentView !== 'product' && (
+        <Header
+          currentView={currentView}
+          onOpenAdminLogin={handleOpenAdminLogin}
+          onCategorySelect={(cat) => {
+            setActiveCategory(cat);
+            if (currentView !== 'home') navigateTo('home');
+          }}
+        />
+      )}
 
       {/* Main Content Area */}
       <div className="flex-1">
@@ -137,6 +156,18 @@ export function App() {
             onBackToStore={() => navigateTo('home')}
             onLogout={handleLogout}
             onNotify={showNotification}
+          />
+        ) : currentView === 'product' ? (
+          <ProductPage
+            products={products}
+            onBack={() => {
+              // Try to go back natively to restore DOM scroll states. If outside our custom scope, route to home.
+              if (window.history.state !== null) {
+                window.history.back();
+              } else {
+                navigateTo('home');
+              }
+            }}
           />
         ) : (
           <HomePage

@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { 
-  Upload, 
-  PlusCircle, 
-  Trash2, 
-  Image as ImageIcon, 
-  Settings, 
-  CheckCircle, 
-  AlertCircle, 
-  ExternalLink, 
-  ArrowLeft, 
-  Database, 
-  Cloud, 
+import {
+  Upload,
+  PlusCircle,
+  Trash2,
+  Image as ImageIcon,
+  Settings,
+  CheckCircle,
+  AlertCircle,
+  ExternalLink,
+  ArrowLeft,
+  Database,
+  Cloud,
   Eye,
   RefreshCw,
   Sparkles,
@@ -31,7 +31,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
   const [price, setPrice] = useState('');
   const [mrp, setMrp] = useState('');
   const [description, setDescription] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [images, setImages] = useState([]);
   const [material, setMaterial] = useState('');
   const [dimensions, setDimensions] = useState('');
   const [isFeatured, setIsFeatured] = useState(false);
@@ -51,12 +51,14 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
 
   // Handle Cloudinary Official Widget
   const handleOpenCloudinaryWidget = () => {
-    setWidgetLoading(true);
+    if (images.length >= 4) {
+      onNotify('Maximum 4 images allowed per product.', 'error');
+      return;
+    }
     openCloudinaryWidget(
       (secureUrl) => {
-        setWidgetLoading(false);
-        setImageUrl(secureUrl);
-        onNotify('Media uploaded successfully to Cloudinary!', 'success');
+        setImages(prev => [...prev, secureUrl]);
+        onNotify('Photo uploaded successfully!', 'success');
       },
       (error) => {
         setWidgetLoading(false);
@@ -65,38 +67,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
     );
   };
 
-  // Handle direct file upload via Cloudinary REST API
-  const handleDirectFileUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Reset input so same file can be re-uploaded if needed
-    if (fileInputRef.current) fileInputRef.current.value = '';
-
-    setUploading(true);
-    setUploadProgress(0);
-
-    try {
-      const secureUrl = await uploadFileDirectly(file, (percent) => {
-        setUploadProgress(percent);
-      });
-      setImageUrl(secureUrl);
-      onNotify('Media uploaded to Cloudinary successfully!', 'success');
-    } catch (err) {
-      console.warn('Direct upload error:', err);
-      // Create local object URL as fallback preview if cloud upload preset is pending
-      const localPreview = URL.createObjectURL(file);
-      setImageUrl(localPreview);
-      onNotify(
-        err.message?.includes('preset')
-          ? 'Upload failed: Your Cloudinary preset may be Signed. Go to API Settings and set an Unsigned preset.'
-          : 'Preview loaded locally. Configure Cloudinary credentials in Settings for cloud sync.',
-        'info'
-      );
-    } finally {
-      setUploading(false);
-    }
-  };
+  // Handle direct file upload via Cloudinary REST API - REMOVED (Enforce Widget use for Auto-Crop)
 
   // Start editing an existing product
   const handleStartEdit = (prod) => {
@@ -106,7 +77,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
     setPrice(prod.price || '');
     setMrp(prod.mrp || '');
     setDescription(prod.description || '');
-    setImageUrl(prod.image_url || '');
+    setImages(prod.images || (prod.image_url ? [prod.image_url] : []));
     setMaterial(prod.material || '');
     setDimensions(prod.dimensions || '');
     setIsFeatured(Boolean(prod.isFeatured));
@@ -122,7 +93,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
     setPrice('');
     setMrp('');
     setDescription('');
-    setImageUrl('');
+    setImages([]);
     setMaterial('');
     setDimensions('');
     setIsFeatured(false);
@@ -147,7 +118,8 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
         price: Number(price),
         mrp: mrp ? Number(mrp) : Math.round(Number(price) * 1.25),
         description: description.trim() || 'Custom handcrafted luxury home decor piece by G One Home Décors.',
-        image_url: imageUrl.trim() || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1000&auto=format&fit=crop',
+        images: images,
+        image_url: images.length > 0 ? images[0] : 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=1000&auto=format&fit=crop',
         material: material.trim() || 'Grade-A Solid Wood & Brass',
         dimensions: dimensions.trim() || 'Bespoke Custom Measurements',
         isFeatured: Boolean(isFeatured),
@@ -199,7 +171,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
   return (
     <div className="min-h-screen bg-[#F7F5F0] pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        
+
         {/* Top Breadcrumb & Action Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 bg-white p-6 rounded-2xl border border-gray-200/80 shadow-xs">
           <div>
@@ -268,11 +240,11 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
 
         {/* 2-Column Layout: Form (Left) & Current Inventory (Right) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
+
           {/* PRODUCT UPLOAD FORM (5 Columns) */}
           <div className="lg:col-span-5">
             <div className="bg-white rounded-2xl border border-gray-200/90 shadow-sm p-6 sm:p-7 sticky top-28">
-              
+
               <div className="flex items-center justify-between pb-4 mb-5 border-b border-gray-100">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${editingProductId ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-[#FCF9F0] border border-[#EEDFA8] text-[#88652D]'}`}>
@@ -300,7 +272,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
               </div>
 
               <form onSubmit={handleSubmitProduct} className="space-y-4">
-                
+
                 {/* Product Title */}
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5 font-['Cinzel']">
@@ -370,61 +342,28 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                   <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5 font-['Cinzel']">
                     Product Media (Cloudinary) *
                   </label>
-                  
+
                   {/* Upload Action Buttons */}
                   <div className="flex flex-col sm:flex-row gap-2 mb-2">
-                    {/* Official Cloudinary Widget Button */}
+                    {/* Official Cloudinary Widget Button (Enforces Cropping) */}
                     <button
                       type="button"
                       onClick={handleOpenCloudinaryWidget}
-                      disabled={widgetLoading || uploading}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#121417] hover:bg-gray-800 text-[#E8D3A2] text-xs font-semibold shadow-xs transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                      className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#121417] hover:bg-[#C5A059] text-[#E8D3A2] hover:text-[#121417] text-xs font-semibold shadow-md transition-all cursor-pointer border border-[#C5A059]/40"
                     >
-                      {widgetLoading ? (
-                        <>
-                          <RefreshCw className="w-4 h-4 animate-spin text-[#C5A059]" />
-                          <span>Loading Widget...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Cloud className="w-4 h-4 text-[#C5A059]" />
-                          <span>Cloudinary Widget</span>
-                        </>
-                      )}
+                      <Cloud className="w-5 h-5" />
+                      <span>Upload Product Photo (Auto-Crop)</span>
                     </button>
-
-                    {/* Direct File Picker */}
-                    <label className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-gray-300 hover:border-[#C5A059] bg-white text-gray-700 text-xs font-semibold transition-colors text-center ${uploading || widgetLoading ? 'opacity-60 cursor-not-allowed pointer-events-none' : 'cursor-pointer'}`}>
-                      <Upload className="w-4 h-4 text-[#C5A059]" />
-                      <span>{uploading ? `Uploading ${uploadProgress}%...` : 'Upload File'}</span>
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*,video/*"
-                        onChange={handleDirectFileUpload}
-                        disabled={uploading || widgetLoading}
-                        className="hidden"
-                      />
-                    </label>
                   </div>
 
-                  {/* Or Direct Image URL input */}
-                  <div className="relative">
-                    <input
-                      type="url"
-                      placeholder="Or paste secure image/video URL directly..."
-                      value={imageUrl}
-                      onChange={(e) => setImageUrl(e.target.value)}
-                      className="w-full px-3.5 py-2 text-xs rounded-xl border border-gray-300 focus:outline-none focus:border-[#C5A059]"
-                    />
-                  </div>
+                  {/* Direct Image URL input removed to enforce Cloudinary Widget usage */}
 
                   {/* Progress indicator */}
                   {uploading && (
                     <div className="mt-2">
                       <div className="w-full bg-gray-200 rounded-full h-1.5">
-                        <div 
-                          className="bg-[#C5A059] h-1.5 rounded-full transition-all duration-300" 
+                        <div
+                          className="bg-[#C5A059] h-1.5 rounded-full transition-all duration-300"
                           style={{ width: `${uploadProgress}%` }}
                         />
                       </div>
@@ -433,20 +372,29 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                   )}
 
                   {/* Media Preview Box */}
-                  {imageUrl && (
-                    <div className="mt-2 relative rounded-xl overflow-hidden border border-[#C5A059]/40 bg-gray-50 max-h-36">
-                      <img
-                        src={imageUrl}
-                        alt="Preview"
-                        className="w-full h-32 object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setImageUrl('')}
-                        className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/60 text-white hover:bg-black text-[10px]"
-                      >
-                        ✕
-                      </button>
+                  {images.length > 0 && (
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      {images.map((imgUrl, idx) => (
+                        <div key={idx} className="relative rounded-xl overflow-hidden border border-[#C5A059]/40 bg-gray-50 h-24">
+                          <img
+                            src={imgUrl}
+                            alt={`Preview ${idx + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setImages(prev => prev.filter((_, i) => i !== idx))}
+                            className="absolute top-1.5 right-1.5 p-1 rounded-full bg-black/60 text-white hover:bg-black text-[10px]"
+                          >
+                            ✕
+                          </button>
+                          {idx === 0 && (
+                            <span className="absolute bottom-1.5 left-1.5 text-[8px] font-bold uppercase bg-[#121417]/80 text-[#C5A059] px-1.5 py-0.5 rounded backdrop-blur-sm">
+                              Primary Image
+                            </span>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -551,7 +499,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
           {/* CATALOG INVENTORY TABLE (7 Columns) */}
           <div className="lg:col-span-7">
             <div className="bg-white rounded-2xl border border-gray-200/90 shadow-sm p-6 sm:p-7">
-              
+
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-6 border-b border-gray-100">
                 <div>
                   <h2 className="font-['Cinzel'] font-bold text-lg text-gray-900 flex items-center gap-2">
@@ -594,7 +542,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                   <tbody className="divide-y divide-gray-100">
                     {products.map((prod) => (
                       <tr key={prod.id} className="hover:bg-gray-50/80 transition-colors group">
-                        
+
                         {/* Title & Thumbnail */}
                         <td className="py-3.5 px-3">
                           <div className="flex items-center gap-3">
@@ -633,7 +581,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                           <div className="flex items-center justify-end gap-2">
                             {/* WhatsApp Direct preview */}
                             <a
-                              href={`https://wa.me/+918606854763?text=Hi%2C%20I%20would%20like%20to%20confirm%20an%20order%20for%20${encodeURIComponent(prod.title)}%20priced%20at%20${encodeURIComponent(formatINR(prod.price))}`}
+                              href={`https://wa.me/+919048437561?text=Hi%2C%20I%20would%20like%20to%20confirm%20an%20order%20for%20${encodeURIComponent(prod.title)}%20priced%20at%20${encodeURIComponent(formatINR(prod.price))}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors"
@@ -677,11 +625,11 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
 
       {/* CLOUDINARY & FIREBASE INTEGRATION MODAL */}
       {showConfigModal && (
-        <div 
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
           onClick={() => setShowConfigModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-3xl p-6 sm:p-8 max-w-xl w-full border border-[#C5A059]/40 shadow-2xl max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
@@ -692,7 +640,7 @@ export const AdminDashboard = ({ products, onBackToStore, onLogout, onNotify }) 
                   API & Cloud Configuration
                 </h3>
               </div>
-              <button 
+              <button
                 onClick={() => setShowConfigModal(false)}
                 className="text-gray-400 hover:text-gray-700 text-sm"
               >
