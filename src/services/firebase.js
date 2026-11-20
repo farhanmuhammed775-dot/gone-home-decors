@@ -162,7 +162,16 @@ export const subscribeToProducts = (onUpdate, onError) => {
       }
     }, (error) => {
       clearTimeout(timeoutId);
-      console.warn('[Gone] Firestore error, falling back to cache:', error.message);
+      if (error.code === 'permission-denied' || error.message?.includes('permissions')) {
+        console.error(
+          '🔴 [Gone] Firebase Security Rules expired!\n' +
+          'Go to Firebase Console → Firestore Database → Rules\n' +
+          'and set: allow read: if true; then click Publish.\n' +
+          'Error:', error.message
+        );
+      } else {
+        console.warn('[Gone] Firestore error, falling back to cache:', error.message);
+      }
       const fallback = getLocalProducts();
       onUpdate(fallback.length > 0 ? fallback : DEFAULT_PRODUCTS);
       if (onError) onError(error);
